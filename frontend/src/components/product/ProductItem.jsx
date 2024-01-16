@@ -2,59 +2,59 @@ import  './ProductItem.css'
 
 const ProductItem = () => {
   return (
-    <li class="product-item glide__slide glide__slide--active">
-    <div class="product-image">
+    <li className="product-item glide__slide glide__slide--active">
+    <div className="product-image">
       <a href="#">
         <img
           src="img/products/product1/1.png"
           alt=""
-          class="img1"
+          className="img1"
         />
         <img
           src="img/products/product1/2.png"
           alt=""
-          class="img2"
+          className="img2"
         />
       </a>
     </div>
-    <div class="product-info">
-      <a href="$" class="product-title">
+    <div className="product-info">
+      <a href="$" className="product-title">
         Analogue Resin Strap
       </a>
-      <ul class="product-star">
+      <ul className="product-star">
         <li>
-          <i class="bi bi-star-fill"></i>
+          <i className="bi bi-star-fill"></i>
         </li>
         <li>
-          <i class="bi bi-star-fill"></i>
+          <i className="bi bi-star-fill"></i>
         </li>
         <li>
-          <i class="bi bi-star-fill"></i>
+          <i className="bi bi-star-fill"></i>
         </li>
         <li>
-          <i class="bi bi-star-fill"></i>
+          <i className="bi bi-star-fill"></i>
         </li>
         <li>
-          <i class="bi bi-star-half"></i>
+          <i className="bi bi-star-half"></i>
         </li>
       </ul>
-      <div class="product-prices">
-        <strong class="new-price">$108.00</strong>
-        <span class="old-price">$165.00</span>
+      <div className="product-prices">
+        <strong className="new-price">$108.00</strong>
+        <span className="old-price">$165.00</span>
       </div>
-      <span class="product-discount">-22%</span>
-      <div class="product-links">
-        <button class="add-to-cart">
-          <i class="bi bi-basket-fill"></i>
+      <span className="product-discount">-22%</span>
+      <div className="product-links">
+        <button className="add-to-cart">
+          <i className="bi bi-basket-fill"></i>
         </button>
         <button>
-          <i class="bi bi-heart-fill"></i>
+          <i className="bi bi-heart-fill"></i>
         </button>
-        <a href="#" class="product-link">
-          <i class="bi bi-eye-fill"></i>
+        <a href="#" className="product-link">
+          <i className="bi bi-eye-fill"></i>
         </a>
         <a href="#">
-          <i class="bi bi-share-fill"></i>
+          <i className="bi bi-share-fill"></i>
         </a>
       </div>
     </div>

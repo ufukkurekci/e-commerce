@@ -1,25 +1,13 @@
-import Category from './components/category/Category'
-import Footer from './components/footer/Footer'
-import Header from './components/header/Header'
-import Policy from './components/policy/Policy'
-import Product from './components/product/Product.jsx'
-import Slider from './components/slider/Slider.jsx'
-import './App.css'
-
-
+import HomePage from "./pages/HomePage.jsx";
+import "./App.css";
+import React from "react";
 
 function App() {
-
   return (
-    <>
-        <Header></Header>
-        <Slider></Slider>
-        <Category></Category>
-        <Product></Product>
-        <Policy></Policy>
-        <Footer></Footer>
-    </>
-  )
+    <React.Fragment>
+      <HomePage></HomePage>
+    </React.Fragment>
+  );
 }
 
-export default App
+export default App;
