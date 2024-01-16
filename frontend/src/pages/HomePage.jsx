@@ -7,7 +7,6 @@ import Campains from "../components/campains/Campains";
 import Blogs from "../components/blogs/Blogs";
 import Brands from "../components/brands/Brands";
 import CampainSingle from "../components/campainsingle/CampainSingle";
-import Policy from "../components/policy/Policy";
 import Footer from "../components/footer/Footer";
 const HomePage = () => {
   return (
@@ -21,7 +20,6 @@ const HomePage = () => {
       <Blogs></Blogs>
       <Brands></Brands>
       <CampainSingle></CampainSingle>
-      <Policy></Policy>
       <Footer></Footer>
     </React.Fragment>
   );

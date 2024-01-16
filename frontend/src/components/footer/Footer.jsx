@@ -1,8 +1,12 @@
+import React from "react";
+import Policy from "../policy/Policy";
 import "./Footer.css"
 
 const Footer = () => {
   return (
-    <footer className="footer">
+    <React.Fragment>
+      <Policy></Policy>
+      <footer className="footer">
       <div className="subscribe-row">
         <div className="container">
           <div className="footer-row-wrapper">
@@ -13,7 +17,7 @@ const Footer = () => {
                     Get our emails for info on new items, sales and more.
                   </h3>
                   <p className="subscribe-desc">
-                    We'll email you a voucher worth $10 off your first order
+                    We`ll email you a voucher worth $10 off your first order
                     over $50.
                   </p>
                 </div>
@@ -195,6 +199,8 @@ const Footer = () => {
         </div>
       </div>
     </footer>
+    </React.Fragment>
+
   );
 };
 
