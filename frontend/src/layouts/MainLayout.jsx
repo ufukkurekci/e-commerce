@@ -2,12 +2,28 @@ import Footer from "../components/footer/Footer";
 import Header from "../components/header/Header";
 import PropTypes from "prop-types";
 import Search from "../components/modal/search/Search";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Dialog from "../components/modal/Dialog/Dialog";
 const MainLayout = (props) => {
   const [isSearchShow, setIsSearchShow] = useState(false);
+  const [isShowDialog, setShowDialog] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setShowDialog(true);
+    }, 2000);
+  }, []);
+
   return (
     <div className="main-layout">
-      <Search isSearchShow={isSearchShow} setIsSearchShow={setIsSearchShow}></Search>
+      <Dialog
+        isShowDialog={isShowDialog}
+        setIsShowDialog={setShowDialog}
+      ></Dialog>
+      <Search
+        isSearchShow={isSearchShow}
+        setIsSearchShow={setIsSearchShow}
+      ></Search>
       <Header setIsSearchShow={setIsSearchShow}></Header>
       {props.children}
       <Footer></Footer>
