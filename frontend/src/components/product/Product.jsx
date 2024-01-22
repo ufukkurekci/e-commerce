@@ -2,10 +2,10 @@ import { useState } from "react";
 import "./Product.css";
 import ProductItem from "./ProductItem";
 import PropTypes from "prop-types";
-import ProductsData from "../../data.json";
+import productsData from "../../data.json";
 import Slider from "react-slick";
 const Product = () => {
-  const [products] = useState(ProductsData);
+  const [products] = useState(productsData);
 
   const NextBtn = ({ onClick }) => {
     return (
