@@ -2,6 +2,11 @@ import "./Dialog.css";
 import PropTypes from "prop-types";
 
 const Dialog = ({ isShowDialog , setIsShowDialog }) => {
+
+  const handleCloseDialog = (event) => {
+    const checked = event.target.checked;
+    localStorage.setItem("dailog", JSON.stringify(!checked));
+  }
   return (
     <div className={`modal-dialog ${isShowDialog ? "show" : "" }`}>
       <div className="modal-content">
@@ -24,7 +29,7 @@ const Dialog = ({ isShowDialog , setIsShowDialog }) => {
               <input type="text" placeholder="Enter Email Address Here" />
               <button className="btn btn-primary">SUBSCRIBE</button>
               <label>
-                <input type="checkbox" />
+                <input type="checkbox" onChange={handleCloseDialog} />
                 <span>Don`t show this popup again</span>
               </label>
             </form>

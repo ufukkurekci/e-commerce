@@ -9,8 +9,11 @@ const MainLayout = (props) => {
   const [isShowDialog, setShowDialog] = useState(false);
 
   useEffect(() => {
+    const dailogstatus = localStorage.getItem("dailog")
+      ? JSON.parse(localStorage.getItem("dailog"))
+      : localStorage.setItem("dailog", JSON.stringify(true));
     setTimeout(() => {
-      setShowDialog(true);
+      setShowDialog(dailogstatus);
     }, 2000);
   }, []);
 
