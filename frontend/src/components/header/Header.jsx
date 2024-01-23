@@ -5,15 +5,6 @@ import PropTypes from "prop-types";
 const Header = ({ setIsSearchShow }) => {
   return (
     <header>
-      <div className="global-notification">
-        <div className="container">
-          <p>
-            SUMMER SALE FOR ALL SWIM SUITS AND FREE EXPRESS INTERNATIONAL
-            DELIVERY - OFF 50%!
-            <a href="shop.html">&nbsp;SHOP NOW</a>
-          </p>
-        </div>
-      </div>
       <div className="header-row">
         <div className="container">
           <div className="header-wrapper">

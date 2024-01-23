@@ -1,28 +1,42 @@
 import Reviews from "../../reviews/Reviews";
 import "./ProductTabs.css";
+import { useState } from "react";
 
 const ProductTabs = () => {
+  const [activeTab, setActiveTab] = useState("desc");
+
+  const handleTabClick = (e, tab) => {
+    e.preventDefault();
+    setActiveTab(tab);
+  };
   return (
     <div className="single-tabs">
       <ul className="tab-list">
         <li>
-          <a href="#" className="tab-button active" data-id="desc">
-            Description
+          <a
+            href="#"
+            className={`tab-button ${activeTab === "desc" ? "active" : ""}`}
+            onClick={(e) => handleTabClick(e, "desc")}
+          >
+            Ürün Bilgisi
           </a>
         </li>
         <li>
-          <a href="#" className="tab-button" data-id="info">
-            Additional information
-          </a>
-        </li>
-        <li>
-          <a href="#" className="tab-button" data-id="reviews">
-            Reviews
+          <a
+            href="#"
+            className={`tab-button ${activeTab === "reviews" ? "active" : ""}`}
+            onClick={(e) => handleTabClick(e, "reviews")}
+          >
+            Yorumlar
           </a>
         </li>
       </ul>
       <div className="tab-panel">
-        <div className="tab-panel-descriptions content active" id="desc">
+        <div
+          className={`tab-panel-descriptions content ${
+            activeTab === "desc" ? "active" : ""
+          }`}
+        >
           <p>
             Quisque varius diam vel metus mattis, id aliquam diam rhoncus. Proin
             vitae magna in dui finibus malesuada et at nulla. Morbi elit ex,
@@ -43,29 +57,7 @@ const ProductTabs = () => {
             Suspendisse velit ex, aliquet vel ornare vel, dignissim a tortor.
           </p>
         </div>
-        <div className="tab-panel-information content" id="info">
-          <h3>Additional information</h3>
-          <table>
-            <tbody>
-              <tr>
-                <th>Color</th>
-                <td>
-                  <p>
-                    Apple Red, Bio Blue, Sweet Orange, Blue, Green, Pink, Black,
-                    White
-                  </p>
-                </td>
-              </tr>
-              <tr>
-                <th>Size</th>
-                <td>
-                  <p>XXS, XS, S, M, L, XL, XXL</p>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-          <Reviews></Reviews>
+        <Reviews active={activeTab === "reviews" ? "content active" : "content"}></Reviews>
       </div>
     </div>
   );
