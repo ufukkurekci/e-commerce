@@ -1,9 +1,9 @@
 import React from "react";
 // import HomePage from "./pages/HomePage.jsx";
 // import ShopPage from "./pages/ShopPage.jsx";
-import ProductDetailPage from "./pages/ProductDetailPage";
+// import ProductDetailPage from "./pages/ProductDetailPage";
 // import BlogPage from "./pages/BlogPage";
-// import CartPage from "./pages/CartPage";
+import CartPage from "./pages/CartPage";
 // import AuthPage from "./pages/AuthPage";
 // import ContactPage from "./pages/ContactPage";
 import "./App.css";
@@ -15,9 +15,9 @@ function App() {
       {/* <ShopPage></ShopPage> */}
       {/* <ContactPage></ContactPage> */}
       {/* <AuthPage></AuthPage> */}
-      {/* <CartPage></CartPage> */}
+      <CartPage></CartPage>
       {/* <BlogPage></BlogPage> */}
-      <ProductDetailPage></ProductDetailPage>
+      {/* <ProductDetailPage></ProductDetailPage> */}
     </React.Fragment>
   );
 }
