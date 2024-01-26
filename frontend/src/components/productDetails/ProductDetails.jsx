@@ -3,7 +3,9 @@ import BreadCrumb from "./breadcrumb/BreadCrumb";
 import ProductGallery from "./productGallery/ProductGallery";
 import ProductInfo from "./productInfo/ProductInfo";
 import ProductTabs from "./productTabs/ProductTabs";
-const ProductDetails = () => {
+import PropTypes from "prop-types";
+
+const ProductDetails = ({ productId }) => {
   return (
     <section className="single-product">
       <div className="container">
@@ -11,7 +13,7 @@ const ProductDetails = () => {
           <BreadCrumb></BreadCrumb>
           <div className="single-content">
             <main className="site-main">
-              <ProductGallery></ProductGallery>
+              <ProductGallery productGalleryId={productId}></ProductGallery>
               <ProductInfo></ProductInfo>
             </main>
           </div>
@@ -22,4 +24,7 @@ const ProductDetails = () => {
   );
 };
 
+ProductDetails.propTypes = {
+  productId: PropTypes.string,
+};
 export default ProductDetails;

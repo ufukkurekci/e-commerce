@@ -2,10 +2,9 @@ import { useContext } from "react";
 import "./ProductItem.css";
 import PropTypes from "prop-types";
 import { CartContext } from "../../context/CardProvider";
-
+import { Link } from "react-router-dom";
 const ProductItem = ({ productItem}) => {
 const {cartItems,addToCart} = useContext(CartContext);
-
 const filteredCart = cartItems.find((cartItems) => cartItems.id === productItem.id);
   return (
     <div className="product-item glide__slide glide__slide--active">
@@ -38,10 +37,10 @@ const filteredCart = cartItems.find((cartItems) => cartItems.id === productItem.
         </ul>
         <div className="product-prices">
           <strong className="new-price">
-            {productItem.price.newPrice.toFixed(2)} TL
+            {`${productItem.price.newPrice.toFixed(2)} TL`}
           </strong>
           <span className="old-price">
-            {productItem.price.oldPrice.toFixed(2)} TL
+          {`${productItem.price.oldPrice.toFixed(2)} TL`}
           </span>
         </div>
         <span className="product-discount">-{productItem.discount}%</span>
@@ -56,9 +55,9 @@ const filteredCart = cartItems.find((cartItems) => cartItems.id === productItem.
           <button>
             <i className="bi bi-heart-fill"></i>
           </button>
-          <a href="#" className="product-link">
+          <Link to={`product/${productItem.id}`} className="product-link">
             <i className="bi bi-eye-fill"></i>
-          </a>
+          </Link>
           <a href="#">
             <i className="bi bi-share-fill"></i>
           </a>

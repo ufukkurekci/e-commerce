@@ -28,7 +28,7 @@ const CardTotals = () => {
           <tr className="cart-subtotal">
             <th>Subtotal</th>
             <td>
-              <span id="subtotal">{subTotals.toFixed(2)} TL</span>
+              <span id="subtotal">{`${subTotals.toFixed(2)} TL`}</span>
             </td>
           </tr>
           <tr>
@@ -51,7 +51,7 @@ const CardTotals = () => {
           <tr>
             <th>Total</th>
             <td>
-              <strong id="cart-total">{cardTotals} TL</strong>
+              <strong id="cart-total">{`${cardTotals} TL`}</strong>
             </td>
           </tr>
         </tbody>

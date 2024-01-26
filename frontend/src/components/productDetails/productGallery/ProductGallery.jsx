@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./ProductGallery.css";
 import productsData from "../../../data.json";
 import Slider from "react-slick";
@@ -40,8 +40,18 @@ PrevBtn.propTypes = {
   onClick: PropTypes.func,
 };
 
-const ProductGallery = () => {
-  const [activeImage, setActiveImage] = useState(productsData[0].img.thumbs[0]);
+const ProductGallery = ({productGalleryId}) => {
+  const [activeImage, setActiveImage] = useState("");
+  const [currentProduct, setcurrentProduct] = useState(null);
+
+useEffect(() => {
+  const product = productsData.find(p => p.id === Number(productGalleryId));
+  if(product){
+    setActiveImage(product.img.thumbs[0]);
+    setcurrentProduct(product);
+  }
+
+},[productGalleryId])
 
   const sliderSettings = {
     dots: false,
@@ -54,13 +64,13 @@ const ProductGallery = () => {
   return (
     <div className="product-gallery">
       <div className="single-image-wrapper">
-        <img src={activeImage} id="single-image" alt="" />
+        <img src={`/${activeImage}`} id="single-image" alt="" />
       </div>
       <div className="product-thumb">
         <div className="glide__track" data-glide-el="track">
           <ol className="gallery-thumbs glide__slides">
             <Slider {...sliderSettings}>
-              {productsData[0].img.thumbs.map((item, index) => (
+              {currentProduct && currentProduct.img.thumbs.map((item, index) => (
                 <li
                   onClick={() => setActiveImage(item)}
                   className="glide__slide"
@@ -70,7 +80,7 @@ const ProductGallery = () => {
                     className={`img-fluid ${
                       item === activeImage ? "active" : ""
                     }`}
-                    src={item}
+                    src={`/${item}`}
                     alt=""
                   />
                 </li>
@@ -82,6 +92,10 @@ const ProductGallery = () => {
       </div>
     </div>
   );
+};
+
+ProductGallery.propTypes = {
+  productGalleryId:PropTypes.string,
 };
 
 export default ProductGallery;
