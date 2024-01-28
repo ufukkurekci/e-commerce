@@ -18,7 +18,10 @@ const Header = ({ setIsSearchShow }) => {
             </div>
             <div className="header-left">
               <Link to={"/"} className="logo">
-                LOGO
+                <img
+                  src="../../../public/img/logo.png"
+                  alt="logo"
+                />
               </Link>
             </div>
             <div className="header-center" id="sidebar">
@@ -29,7 +32,7 @@ const Header = ({ setIsSearchShow }) => {
                       to={"/"}
                       className={`menu-link ${pathname === "/" && "active"}`}
                     >
-                      Home
+                      Baharat
                       <i className="bi bi-chevron-down"></i>
                     </Link>
                     <div className="menu-dropdown-wrapper">
@@ -71,7 +74,7 @@ const Header = ({ setIsSearchShow }) => {
                         pathname === "/shop" && "active"
                       }`}
                     >
-                      Shop
+                      KURU
                       <i className="bi bi-chevron-down"></i>
                     </Link>
                     <div className="menu-dropdown-wrapper">
@@ -176,7 +179,7 @@ const Header = ({ setIsSearchShow }) => {
                       </div>
                     </div>
                   </li>
-                  <li className="menu-list-item">
+                  {/* <li className="menu-list-item">
                     <Link
                       to={"/blog"}
                       className={`menu-link ${
@@ -185,7 +188,7 @@ const Header = ({ setIsSearchShow }) => {
                     >
                       Blog
                     </Link>
-                  </li>
+                  </li> */}
                   <li className="menu-list-item">
                     <Link
                       to={"/contact"}
@@ -193,7 +196,7 @@ const Header = ({ setIsSearchShow }) => {
                         pathname === "/contact" && "active"
                       }`}
                     >
-                      Contact
+                      İLETİŞİM
                     </Link>
                   </li>
                 </ul>

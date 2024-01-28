@@ -7,7 +7,6 @@ import https from "https";
 import fs from "fs";
 import path from "path";
 import cors from "cors";
-import DBModules from "./db";
 import Users from "./db/users";
 import helmet from "helmet";
 import GenericErrorHandler from "./middlewares/GenericErrorHandler";
@@ -15,9 +14,8 @@ import ApiError from "./error/ApiError";
 import mongoose from "mongoose";
 import passport from "passport";
 import Session from "./middlewares/Session";
-import { ExtractJwt , Strategy as JwtStrategy } from "passport-jwt";
-import test from "node:test";
-import routes from "./routes/index" 
+import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
+import routes from "./routes/index";
 
 const envPath = config?.production
     ? "./env/.prod"
@@ -99,11 +97,11 @@ routes.forEach((routeFn,index) => {
 
 app.use("/api",router);
 
-app.all("/test-auth", Session, (req, res) => {
-    res.json({
-        test: true
-    });
-});
+// app.all("/test-auth", Session, (req, res) => {
+//     res.json({
+//         test: true
+//     });
+// });
 
 
 app.use(GenericErrorHandler);

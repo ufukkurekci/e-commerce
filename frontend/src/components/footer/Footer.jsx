@@ -1,6 +1,8 @@
 import React from "react";
 import Policy from "../policy/Policy";
 import "./Footer.css"
+import { Link } from "react-router-dom";
+
 
 const Footer = () => {
   return (
@@ -14,7 +16,7 @@ const Footer = () => {
               <div className="footer-subscribe">
                 <div className="footer-subscribe-top">
                   <h3 className="subscribe-title">
-                    Get our emails for info on new items, sales and more.
+                    Yeni ürünler , indirim ve kampanyalardan haberiniz olsun !
                   </h3>
                   <p className="subscribe-desc">
                     We`ll email you a voucher worth $10 off your first order
@@ -27,14 +29,14 @@ const Footer = () => {
                       type="text"
                       placeholder="Enter your email address."
                     />
-                    <button className="btn">Subscribe</button>
+                    <button className="btn">ABONE OL</button>
                   </form>
-                  <p className="privacy-text">
+                  {/* <p className="privacy-text">
                     By subscribing you agree to our{" "}
                     <a href="#">
                       Terms & Conditions and Privacy & Cookies Policy.
                     </a>
-                  </p>
+                  </p> */}
                 </div>
               </div>
             </div>
@@ -56,8 +58,7 @@ const Footer = () => {
                   </a>
                 </div>
                 <p className="privacy-text">
-                  <strong>Shopping App:</strong> Try our View in Your Room
-                  feature, manage registries and save payment info.
+                  <strong>Yakında tüm platformlarda ..</strong> 
                 </p>
               </div>
             </div>
@@ -69,65 +70,59 @@ const Footer = () => {
           <div className="footer-widgets">
             <div className="brand-info">
               <div className="footer-logo">
-                <a href="index.html" className="logo">
-                  LOGO
-                </a>
+              <Link to={"/"} className="logo">
+                <img
+                  src="../../../public/img/logo.png"
+                  alt="logo"
+                />
+              </Link>
               </div>
               <div className="footer-desc">
                 <p>
                   {" "}
-                  Quis ipsum suspendisse ultrices gravida. Risus commodo viverra
-                  maecenas accumsan lacus vel facilisis in termapol.
+                  Muhteşem Tat !
                 </p>
               </div>
               <div className="footer-contact">
                 <p>
                   <a href="tel:555 555 55 55">(+800) 1234 5678 90</a> –{" "}
-                  <a href="mailto:info@example.com">info@example.com</a>
+                  <a href="mailto:info@example.com">info@bahcembaharat.com</a>
                 </p>
               </div>
             </div>
             <div className="widget-nav-menu">
-              <h4>Information</h4>
+              <h4>Bilgi</h4>
               <ul className="menu-list">
                 <li>
-                  <a href="#">About Us</a>
+                  <a href="#">Hakkımızda</a>
                 </li>
                 <li>
-                  <a href="#">Privacy Policy</a>
+                  <a href="#">Gizlilik Politikası</a>
                 </li>
                 <li>
-                  <a href="#">Returns Policy</a>
+                  <a href="#">İade Politikası</a>
                 </li>
                 <li>
-                  <a href="#">Shipping Policy</a>
-                </li>
-                <li>
-                  <a href="#">Dropshipping</a>
+                  <a href="#">Teslimat Politikası</a>
                 </li>
               </ul>
             </div>
             <div className="widget-nav-menu">
-              <h4>Account</h4>
+              <h4>Hesap</h4>
               <ul className="menu-list">
                 <li>
-                  <a href="#">Dashboard</a>
+                  <a href="#">Hesabım</a>
                 </li>
                 <li>
-                  <a href="#">My Orders</a>
+                  <a href="#">Siparişlerim</a>
                 </li>
                 <li>
-                  <a href="#">My Wishlist</a>
+                  <a href="#">Favorilerim</a>
                 </li>
-                <li>
-                  <a href="#">Account details</a>
-                </li>
-                <li>
-                  <a href="#">Track My Orders</a>
-                </li>
+
               </ul>
             </div>
-            <div className="widget-nav-menu">
+            {/* <div className="widget-nav-menu">
               <h4>Shop</h4>
               <ul className="menu-list">
                 <li>
@@ -146,8 +141,8 @@ const Footer = () => {
                   <a href="#">Sale Products</a>
                 </li>
               </ul>
-            </div>
-            <div className="widget-nav-menu">
+            </div> */}
+            {/* <div className="widget-nav-menu">
               <h4>Categories</h4>
               <ul className="menu-list">
                 <li>
@@ -166,7 +161,7 @@ const Footer = () => {
                   <a href="#">Shoes</a>
                 </li>
               </ul>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
@@ -175,8 +170,7 @@ const Footer = () => {
           <div className="footer-copyright">
             <div className="site-copyright">
               <p>
-                Copyright 2022 © E-Commerce Theme. All right reserved. Powered
-                by Emin Basbayan.
+                Copyright 2024 © Bahçem Baharat. All right reserved. 
               </p>
             </div>
             <a href="#">
@@ -185,13 +179,13 @@ const Footer = () => {
             <div className="footer-menu">
               <ul className="footer-menu-list">
                 <li className="list-item">
-                  <a href="#">Privacy Policy</a>
+                  <a href="#">Gizlilik Politikası</a>
                 </li>
                 <li className="list-item">
-                  <a href="#">Terms and Conditions</a>
+                  <a href="#">Uzaktan Satış Şartları</a>
                 </li>
                 <li className="list-item">
-                  <a href="#">Returns Policy</a>
+                  <a href="#">İade Politikası</a>
                 </li>
               </ul>
             </div>
