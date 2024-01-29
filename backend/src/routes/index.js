@@ -7,6 +7,7 @@ import Payment_3D from "./3D_payment";
 import checkout from "./checkout";
 import cancel_payment from "./cancel_payments";
 import refundPayment from "./refund-payment";
+import product from "./product";
 export default [
     Test,
     Users,
@@ -16,6 +17,7 @@ export default [
     Payment_3D,
     checkout,
     cancel_payment,
-    refundPayment
+    refundPayment,
+    product
 
 ]

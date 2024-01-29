@@ -1,13 +1,10 @@
 import Iyzipay from "iyzipay";
 import moment from "moment";
 import Carts from "../db/carts";
-import Users from "../db/users.js";
 import ApiError from "../error/ApiError";
 import Session from "../middlewares/Session";
 import * as Checkout from "../services/iyzico/methods/checkout.js";
-import * as Cards from "../services/iyzico/methods/card.js";
 import nanoid from "../utils/nanoid.js";
-import { CompletePayment } from "../utils/payment.js";
 import { completePayment } from "../services/iyzico/methods/threeds-payments.js";
 
 export default (router) => {
