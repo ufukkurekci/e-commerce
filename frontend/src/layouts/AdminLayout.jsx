@@ -1,4 +1,4 @@
-// iconları aldıgımız yer 
+// iconları aldıgımız yer https://ant.design/components/icon  düzenlenicek
 import { Layout, Menu } from "antd";
 import PropTypes from "prop-types";
 import {
