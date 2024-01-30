@@ -27,8 +27,8 @@ export default (router) => {
   router.post("/register", async (req, res) => {
     try {
       const { email, password } = req.body;
-      const user = await Users.findOne({ email: email });
-      if (user) {
+      const existuser = await Users.findOne({ email: email });
+      if (existuser) {
         throw new ApiError("Email is already taken", 401, "unAuthorized");
       }
       const newUser = await new Users({

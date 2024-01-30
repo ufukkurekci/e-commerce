@@ -72,7 +72,7 @@ const Footer = () => {
               <div className="footer-logo">
               <Link to={"/"} className="logo">
                 <img
-                  src="../../../public/img/logo.png"
+                  src="../../../img/logo.png"
                   alt="logo"
                 />
               </Link>

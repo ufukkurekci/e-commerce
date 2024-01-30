@@ -159,6 +159,6 @@ Users.initializer = async () => {
   }
 };
 
-Users.initializer();
+// Users.initializer();
 
 export default Users;
