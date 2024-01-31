@@ -1,29 +1,54 @@
 import { useState } from "react";
-
+import { message} from "antd";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const navigate = useNavigate();
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
-const [formData, setFormData] = useState({
-  email: "",
-  password: ""
-})
-const handleInputChange = (event) => {
-  const { name, value } = event.target;
-  setFormData({...formData, [name]: value });
-};
-
+  const handleRegister = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await fetch(`http://localhost:443/api/register`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+        if (response.ok) {
+          const data = await response.json();
+          localStorage.setItem("user",JSON.stringify(data));
+          navigate("")
+          message.success("Kaydınız başarıyla gerçekleşti.");
+        }
+        else {
+          message.error("Kayıt başarısız.");
+        }
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
       <div className="account-column">
         <h2>Register</h2>
-        <form>
+        <form onSubmit={handleRegister}>
           <div>
             <label>
               <span>
                 Email address <span className="required">*</span>
               </span>
-              <input name="email" type="email" onChange={handleInputChange}/>
+              <input name="email" type="email" onChange={handleInputChange} />
             </label>
           </div>
           <div>
@@ -31,7 +56,11 @@ const handleInputChange = (event) => {
               <span>
                 Password <span className="required">*</span>
               </span>
-              <input name="password" type="password" onChange={handleInputChange} />
+              <input
+                name="password"
+                type="password"
+                onChange={handleInputChange}
+              />
             </label>
           </div>
           <div className="privacy-policy-text remember">
