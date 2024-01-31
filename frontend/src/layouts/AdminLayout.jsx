@@ -13,9 +13,15 @@ import {
 import { useNavigate } from "react-router-dom";
 
 const { Sider, Header, Content } = Layout;
+
+const getUserRole = () => {
+  const authData = JSON.parse(localStorage.getItem("authdata"));
+  return authData ? authData.user.role : null;
+};
+
 const AdminLayout = ({ children }) => {
   const navigate = useNavigate();
-
+  const userRole = getUserRole();
   const menuItems = [
     {
       key: "1",
@@ -123,46 +129,48 @@ const AdminLayout = ({ children }) => {
       },
     },
   ];
-
-  return (
-    <div className="admin-layout">
-      <Layout
-        style={{
-          minHeight: "100vh",
-        }}
-      >
-        <Sider theme="dark" width={200}>
-          <Menu
-            mode="vertical"
-            style={{
-              height: "100%",
-            }}
-            items={menuItems}
-          ></Menu>
-        </Sider>
-        <Layout>
-          <Header>
-            <div
+  if (userRole === "admin") {
+    return (
+      <div className="admin-layout">
+        <Layout
+          style={{
+            minHeight: "100vh",
+          }}
+        >
+          <Sider theme="dark" width={200}>
+            <Menu
+              mode="vertical"
               style={{
-                display: "flex",
-                justifyContent: "space-between",
-                color: "white",
+                height: "100%",
               }}
-            >
-              <h3>Admin Panel</h3>
-            </div>
-          </Header>
-          <Content>
-            {children}
-          </Content>
+              items={menuItems}
+            ></Menu>
+          </Sider>
+          <Layout>
+            <Header>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  color: "white",
+                }}
+              >
+                <h3>Admin Panel</h3>
+              </div>
+            </Header>
+            <Content>{children}</Content>
+          </Layout>
         </Layout>
-      </Layout>
-    </div>
-  );
+      </div>
+    );
+  }
+  else{
+    return window.location.href = "/";  // return to main page
+  }
 };
 
 export default AdminLayout;
 
-AdminLayout.propTypes= {
+AdminLayout.propTypes = {
   children: PropTypes.node,
-}
+};

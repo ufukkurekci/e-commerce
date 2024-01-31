@@ -13,10 +13,11 @@ const Register = () => {
     setFormData({ ...formData, [name]: value });
   };
 
+  const apiURL = import.meta.env.VITE_API_BASE_URL;
   const handleRegister = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch(`http://localhost:443/api/register`, {
+      const response = await fetch(`${apiURL}/register`, {
         method: "POST",
         headers: {
           "content-type": "application/json",
@@ -25,8 +26,8 @@ const Register = () => {
       });
         if (response.ok) {
           const data = await response.json();
-          localStorage.setItem("user",JSON.stringify(data));
-          navigate("")
+          localStorage.setItem("authdata",JSON.stringify(data));
+          navigate("/");
           message.success("Kaydınız başarıyla gerçekleşti.");
         }
         else {

@@ -100,8 +100,8 @@ app.use(GenericErrorHandler);
 
 if(process.env.HTTPS_ENABLED === "true")
 {
-    const key = fs.readFileSync(path.join(__dirname,"./certs/key.pem")).toString();
-    const cert = fs.readFileSync(path.join(__dirname,"./certs/cert.pem")).toString();
+    // const key = fs.readFileSync(path.join(__dirname,"./certs/key.pem")).toString();
+    // const cert = fs.readFileSync(path.join(__dirname,"./certs/cert.pem")).toString();
 
     const server = http.createServer(app);
 

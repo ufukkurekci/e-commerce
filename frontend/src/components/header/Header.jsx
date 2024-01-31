@@ -3,11 +3,14 @@ import { CartContext } from "../../context/CardProvider";
 import { useContext } from "react";
 import "./Header.css";
 import { Link, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 
 const Header = ({ setIsSearchShow }) => {
   const { cartItems } = useContext(CartContext);
-
+  const user = localStorage.getItem("authdata");
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   return (
     <header>
       <div className="header-row">
@@ -18,10 +21,7 @@ const Header = ({ setIsSearchShow }) => {
             </div>
             <div className="header-left">
               <Link to={"/"} className="logo">
-                <img
-                  src="../../../img/logo.png"
-                  alt="logo"
-                />
+                <img src="../../../img/logo.png" alt="logo" />
               </Link>
             </div>
             <div className="header-center" id="sidebar">
@@ -205,7 +205,10 @@ const Header = ({ setIsSearchShow }) => {
             </div>
             <div className="header-right">
               <div className="header-right-links">
-                <Link to={"/auth"} className={`menu-link ${pathname === "/auth" && "active"}`}>
+                <Link
+                  to={"/auth"}
+                  className={`menu-link ${pathname === "/auth" && "active"}`}
+                >
                   <i className="bi bi-person"></i>
                 </Link>
                 <button
@@ -214,9 +217,9 @@ const Header = ({ setIsSearchShow }) => {
                 >
                   <i className="bi bi-search"></i>
                 </button>
-                <a href="#">
+                {/* <a href="#">
                   <i className="bi bi-heart"></i>
-                </a>
+                </a> */}
                 <div className="header-cart">
                   <Link to={"/cart"} className="header-cart-link">
                     <i className="bi bi-bag"></i>
@@ -225,6 +228,23 @@ const Header = ({ setIsSearchShow }) => {
                     </span>
                   </Link>
                 </div>
+                {user && (
+                  <button
+                    className="search-button"
+                    onClick={() => {
+                      if (
+                        window.confirm(
+                          "Çıkış yapmak istediğinizden emin misiniz ? "
+                        )
+                      ) {
+                        localStorage.removeItem("authdata");
+                        navigate("/auth");
+                      }
+                    }}
+                  >
+                    <i className="bi bi-box-arrow-right"></i>
+                  </button>
+                )}
               </div>
             </div>
           </div>
