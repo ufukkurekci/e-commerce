@@ -1,16 +1,22 @@
 import PropTypes from "prop-types";
 import { CartContext } from "../../context/CardProvider";
 import { useContext } from "react";
+import { Popconfirm, Button, message } from "antd";
 import "./Header.css";
 import { Link, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-
 
 const Header = ({ setIsSearchShow }) => {
   const { cartItems } = useContext(CartContext);
   const user = localStorage.getItem("authdata");
   const { pathname } = useLocation();
   const navigate = useNavigate();
+
+  const logOut = () => {
+    localStorage.removeItem("authdata");
+    navigate("/auth");
+    message.success("Çıkış yapıldı.");
+  };
   return (
     <header>
       <div className="header-row">
@@ -229,21 +235,17 @@ const Header = ({ setIsSearchShow }) => {
                   </Link>
                 </div>
                 {user && (
-                  <button
-                    className="search-button"
-                    onClick={() => {
-                      if (
-                        window.confirm(
-                          "Çıkış yapmak istediğinizden emin misiniz ? "
-                        )
-                      ) {
-                        localStorage.removeItem("authdata");
-                        navigate("/auth");
-                      }
-                    }}
+                  <Popconfirm
+                    title="Çıkış Yap"
+                    description="Çıkış yapmak istediğinizden emin misiniz?"
+                    onConfirm={logOut}
+                    okText="Evet"
+                    cancelText="Hayır"
                   >
-                    <i className="bi bi-box-arrow-right"></i>
-                  </button>
+                    <Button className="search-button">
+                      <i className="bi bi-box-arrow-right"></i>
+                    </Button>
+                  </Popconfirm>
                 )}
               </div>
             </div>

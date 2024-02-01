@@ -22,9 +22,7 @@ export default (router) => {
   router.get("/product/getall", async (req, res) => {
     try {
       const products = await Products.find();
-      res.status(200).json({
-        products,
-      });
+      res.status(200).json(products);
     } catch (error) {
       console.log(error);
       throw new ApiError(error, 500, "product getall error");
@@ -55,7 +53,7 @@ export default (router) => {
     await Products.deleteOne(existproduct);
     res.status(200).json({
       message: "Product deleted",
-      product:existproduct
+      product: existproduct,
     });
   });
 
@@ -66,17 +64,21 @@ export default (router) => {
       if (!existproduct) {
         throw new ApiError("Product not found", 404, "product not found");
       }
-  
-      const updatedProduct = await Products.findByIdAndUpdate(existproduct.id, updates, {
-        new: true,
-      });
-  
+
+      const updatedProduct = await Products.findByIdAndUpdate(
+        existproduct.id,
+        updates,
+        {
+          new: true,
+        }
+      );
+
       res.status(200).json({
         message: "Product updated",
         product: updatedProduct,
       });
     } catch (error) {
-      throw new ApiError(error,404);
+      throw new ApiError(error, 404);
     }
   });
 };

@@ -121,34 +121,35 @@ UsersSchema.pre("save", async function (next) {
 
 const Users = mongoose.model("Users", UsersSchema);
 
-Users.starterData = [
-  {
-    // _id: new mongoose.Types.ObjectId("61d054de0d8af19519e88a61"),
-    locale: "tr",
-    name: "John",
-    surname: "Doe",
-    email: "email@email.com",
-    phoneNumber: "+905350000000",
-    identityNumber: "74300864791",
-    password: "123456",
-    avatarUrl: "https://i.pravatar.cc/300",
-    address: "Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1",
-    city: "Istanbul",
-    country: "Turkey",
-    zipCode: "34732",
-    ip: "85.34.78.112",
-    cardUserKey: "",
-  },
-];
+// Users.starterData = [
+//   {
+//     // _id: new mongoose.Types.ObjectId("61d054de0d8af19519e88a61"),
+//     locale: "tr",
+//     name: "John",
+//     surname: "Doe",
+//     role:"admin",
+//     email: "email@email.com",
+//     phoneNumber: "+905350000000",
+//     identityNumber: "74300864791",
+//     password: "123456",
+//     avatarUrl: "https://i.pravatar.cc/300",
+//     address: "Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1",
+//     city: "Istanbul",
+//     country: "Turkey",
+//     zipCode: "34732",
+//     ip: "85.34.78.112",
+//     cardUserKey: "",
+//   },
+// ];
 
-Users.exampleUserCardData = {
-  cardAlias: "Benim Kartım",
-  cardHolderName: "John Doe",
-  cardNumber: "5528790000000008",
-  expireMonth: "12",
-  expireYear: "2030",
-  cvc: "123",
-};
+// Users.exampleUserCardData = {
+//   cardAlias: "Benim Kartım",
+//   cardHolderName: "John Doe",
+//   cardNumber: "5528790000000008",
+//   expireMonth: "12",
+//   expireYear: "2030",
+//   cvc: "123",
+// };
 
 Users.initializer = async () => {
   const count = await Users.estimatedDocumentCount();

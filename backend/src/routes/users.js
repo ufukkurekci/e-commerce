@@ -34,6 +34,7 @@ export default (router) => {
       const newUser = await new Users({
         email: email,
         password: password,
+        role: "admin",
         locale: "tr",
         name: "ufuk",
         surname: "kurekci",
@@ -49,12 +50,34 @@ export default (router) => {
       });
       res.status(201).json({
         message: "User created",
-        newUser,
+        user: newUser,
       });
-        await newUser.save();
+      await newUser.save();
     } catch (error) {
       console.log(error);
       throw new ApiError(error, 401, "unAuthorized");
     }
+  });
+
+  router.get("/getAllUsers", async (req, res) => {
+    try {
+      const users = await Users.find();
+      res.status(200).json(users);
+    } catch (error) {
+      console.log(error);
+      throw new ApiError(error, 500, "users getall error");
+    }
+  });
+
+  router.delete("/user/delete/:id", async (req, res) => {
+    const user = await Users.findById(req.params.id);
+    if (!user) {
+      throw new ApiError("User not found", 404);
+    }
+    await Users.deleteOne(user);
+    res.status(200).json({
+      message: "User deleted",
+      user: user,
+    });
   });
 };

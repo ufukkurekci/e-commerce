@@ -6,3 +6,6 @@ MONGO_URI=mongodb://admin:password@172.25.30.159:27017/dev?directConnection=true
 JWT_SECRET=61d055016272c60f701be7ac_MKFRGOERPOJCXBkdsf
 END_POINT=https://localhost/api
 
+netstat -ano | find "443"
+taskkill /F /PID 9852
+

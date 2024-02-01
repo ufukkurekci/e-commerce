@@ -4,8 +4,6 @@ import config from "./config";
 import express from "express";
 import logger from "morgan";
 import http from "http";
-import fs from "fs";
-import path from "path";
 import cors from "cors";
 import Users from "./db/users";
 import helmet from "helmet";
