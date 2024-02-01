@@ -51,22 +51,6 @@ const AdminUserPage = () => {
 
   const columns = [
     {
-      title: "Avatar",
-      dataIndex: "avatarUrl",
-      key: "avatarUrl",
-      render: (imgSrc) => {
-        <img
-          src={imgSrc}
-          alt="avatar"
-          style={{
-            width: "50px",
-            height: "50px",
-            borderRadius: "50%",
-          }}
-        ></img>;
-      },
-    },
-    {
       title: "Ad",
       dataIndex: "name",
       key: "name",

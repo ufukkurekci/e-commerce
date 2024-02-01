@@ -5,10 +5,10 @@ import {
   UserOutlined,
   LaptopOutlined,
   RollbackOutlined,
-  BarcodeOutlined,
+  // BarcodeOutlined,
   DashboardOutlined,
   ShoppingCartOutlined,
-  AppstoreOutlined,
+  // AppstoreOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 
@@ -31,30 +31,30 @@ const AdminLayout = ({ children }) => {
         navigate(`/admin`);
       },
     },
-    {
-      key: "2",
-      icon: <AppstoreOutlined />,
-      label: "Kategoriler",
-      path: "/",
-      children: [
-        {
-          key: "3",
-          label: "Kategori Listesi",
-          path: "/admin/categories",
-          onClick: () => {
-            navigate(`/admin/categories`);
-          },
-        },
-        {
-          key: "4",
-          label: "Yeni Kategori Oluştur",
-          path: "/admin/categories/create",
-          onClick: () => {
-            navigate("/admin/categories/create");
-          },
-        },
-      ],
-    },
+    // {
+    //   key: "2",
+    //   icon: <AppstoreOutlined />,
+    //   label: "Kategoriler",
+    //   path: "/",
+    //   children: [
+    //     {
+    //       key: "3",
+    //       label: "Kategori Listesi",
+    //       path: "/admin/categories",
+    //       onClick: () => {
+    //         navigate(`/admin/categories`);
+    //       },
+    //     },
+    //     {
+    //       key: "4",
+    //       label: "Yeni Kategori Oluştur",
+    //       path: "/admin/categories/create",
+    //       onClick: () => {
+    //         navigate("/admin/categories/create");
+    //       },
+    //     },
+    //   ],
+    // },
     {
       key: "5",
       icon: <LaptopOutlined />,
@@ -79,30 +79,30 @@ const AdminLayout = ({ children }) => {
         },
       ],
     },
-    {
-      key: "8",
-      icon: <BarcodeOutlined />,
-      label: "Kuponlar",
-      path: "/admin/coupons",
-      children: [
-        {
-          key: "9",
-          label: "Kupon Listesi",
-          path: "/admin/coupons",
-          onClick: () => {
-            navigate(`/admin/coupons`);
-          },
-        },
-        {
-          key: "10",
-          label: "Yeni Kupon Oluştur",
-          path: "/admin/coupons/create",
-          onClick: () => {
-            navigate("/admin/coupons/create");
-          },
-        },
-      ],
-    },
+    // {
+    //   key: "8",
+    //   icon: <BarcodeOutlined />,
+    //   label: "Kuponlar",
+    //   path: "/admin/coupons",
+    //   children: [
+    //     {
+    //       key: "9",
+    //       label: "Kupon Listesi",
+    //       path: "/admin/coupons",
+    //       onClick: () => {
+    //         navigate(`/admin/coupons`);
+    //       },
+    //     },
+    //     {
+    //       key: "10",
+    //       label: "Yeni Kupon Oluştur",
+    //       path: "/admin/coupons/create",
+    //       onClick: () => {
+    //         navigate("/admin/coupons/create");
+    //       },
+    //     },
+    //   ],
+    // },
     {
       key: "11",
       icon: <UserOutlined />,
