@@ -8,6 +8,7 @@ import AuthPage from "./pages/AuthPage";
 import ContactPage from "./pages/ContactPage";
 import AdminUserPage from "./pages/admin/AdminUserPage.jsx";
 import "./App.css";
+import CreateProductPage from "./pages/products/CreateProductPage.jsx";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
       <Route path="/contact" element={<ContactPage />}></Route>
       <Route path="/admin/*">
         <Route path="users" element={<AdminUserPage />}></Route>
+        <Route path="products/create" element={<CreateProductPage />}></Route>
       </Route>
     </Routes>
   );
