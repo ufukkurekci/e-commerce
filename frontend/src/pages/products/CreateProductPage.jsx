@@ -1,15 +1,48 @@
-import { Button, Form, Input, InputNumber } from "antd";
-// import { useState } from "react";
-// import ReactQuill from "react-quill";
-// import "react-quill/dist/quill.snow.css";
-
+import { Button, Form, Input, InputNumber, Spin, message } from "antd";
+import { useState } from "react";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import UploadImage from "./UploadImage";
 
 const CreateProductPage = () => {
-//   const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
-//   const apiURL = import.meta.env.VITE_API_BASE_URL;
+  const apiURL = import.meta.env.VITE_API_BASE_URL;
+
+  const onFinish = async (values) => {
+    const imgLinks = values.img.split("\n").map((link) => link.trim());
+    setLoading(true);
+
+    try {
+      const response = await fetch(`${apiURL}/api/products`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          ...values,
+          price: {
+            basePrice: values.basePrice,
+            discountPrice: values.discountPrice,
+          },
+          img: imgLinks,
+        }),
+      });
+      if (response.ok) {
+        message.success("Ürün başarıyla oluşturuldu");
+        form.resetFields();
+      } else {
+        message.error("Ürün oluşturulamadı");
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
-      <Form name="basic" layout="vertical"  form={form}>
+    <Spin spinning={loading}>
+      <Form name="basic" layout="vertical" onFinish={onFinish} form={form}>
         <Form.Item
           label="Ürün İsmi"
           name="name"
@@ -56,48 +89,21 @@ const CreateProductPage = () => {
             },
           ]}
         >
-          {/* <ReactQuill
+          <ReactQuill
             theme="snow"
             style={{
               backgroundColor: "white",
             }}
-          /> */}
-        </Form.Item>
-        <Form.Item
-          label="Ürün Görselleri (Linkler)"
-          name="img"
-          rules={[
-            {
-              required: true,
-              message: "Lütfen en az 4 ürün görsel linki girin!",
-            },
-          ]}
-        >
-          <Input.TextArea
-            placeholder="Her bir görsel linkini yeni bir satıra yazın."
-            autoSize={{ minRows: 4 }}
           />
         </Form.Item>
-        <Form.Item
-          label="Ürün Renkleri (RGB Kodları)"
-          name="colors"
-          rules={[
-            {
-              required: true,
-              message: "Lütfen en az 1 ürün rengi girin!",
-            },
-          ]}
-        >
-          <Input.TextArea
-            placeholder="Her bir RGB kodunu yeni bir satıra yazın."
-            autoSize={{ minRows: 4 }}
-          />
+        <Form.Item label="Ürün Görselleri (Linkler)" name="img">
+          <UploadImage></UploadImage>
         </Form.Item>
-
         <Button type="primary" htmlType="submit">
           Oluştur
         </Button>
       </Form>
+    </Spin>
   );
 };
 

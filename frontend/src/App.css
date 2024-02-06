@@ -12,4 +12,6 @@
   .blog-page {
     margin-top: 40px;
   }
-  
+  .ql-editor{
+    min-height: 100px !important;
+  }
