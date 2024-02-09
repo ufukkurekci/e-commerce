@@ -7,26 +7,45 @@ import UploadImage from "./UploadImage";
 const CreateProductPage = () => {
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
+  const [imageFileList, setImageFileList] = useState([]);
   const apiURL = import.meta.env.VITE_API_BASE_URL;
 
-  const onFinish = async (values) => {
-    const imgLinks = values.img.split("\n").map((link) => link.trim());
-    setLoading(true);
+  // UploadImage bileşeninden gelen fileList'i güncelleyen fonksiyon
+  const handleImageFileListChange = (newFileList) => {
+    const firstFile = newFileList[0];
+    setImageFileList([firstFile]);
+    console.log("UploadImage bileşeninden gelen file");
+    console.log(firstFile); // Dosyayı kontrol et
 
+
+
+  };
+  const onFinish = async (values) => {
+    setLoading(true);
+    const parseHTMLToPlainText = (htmlString) => {
+      const doc = new DOMParser().parseFromString(htmlString, 'text/html');
+      return doc.body.textContent || "";
+    };
     try {
-      const response = await fetch(`${apiURL}/api/products`, {
+      const formData = new FormData();
+
+      formData.append("name", values.name);
+      formData.append("description", parseHTMLToPlainText(values.description));
+      formData.append("basePrice", values.basePrice);
+      formData.append("discountPrice", values.discountPrice);
+      formData.append("stock", values.stock);
+      imageFileList.forEach((file, index) => {
+        formData.append(`images[${index}]`, file.originFileObj);
+      });
+    formData.append("images", imageFileList[0].originFileObj);
+
+      for (var pair of formData.entries()) {
+        console.log(pair[0] + ": " + pair[1]);
+      }
+      console.log(values.description);
+      const response = await fetch(`${apiURL}/product/add`, {
         method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({
-          ...values,
-          price: {
-            basePrice: values.basePrice,
-            discountPrice: values.discountPrice,
-          },
-          img: imgLinks,
-        }),
+        body: formData,
       });
       if (response.ok) {
         message.success("Ürün başarıyla oluşturuldu");
@@ -40,12 +59,14 @@ const CreateProductPage = () => {
       setLoading(false);
     }
   };
+
   return (
     <Spin spinning={loading}>
       <Form name="basic" layout="vertical" onFinish={onFinish} form={form}>
         <Form.Item
           label="Ürün İsmi"
           name="name"
+          initialValue="test ürünü" 
           rules={[
             {
               required: true,
@@ -58,6 +79,7 @@ const CreateProductPage = () => {
         <Form.Item
           label="Fiyat"
           name="basePrice"
+          initialValue={100}
           rules={[
             {
               required: true,
@@ -70,6 +92,7 @@ const CreateProductPage = () => {
         <Form.Item
           label="İndirim Oranı"
           name="discountPrice"
+          initialValue={10}
           rules={[
             {
               required: true,
@@ -80,8 +103,22 @@ const CreateProductPage = () => {
           <InputNumber />
         </Form.Item>
         <Form.Item
+          label="Stock Bilgisi"
+          name="stock"
+          initialValue={20}
+          rules={[
+            {
+              required: true,
+              message: "Lütfen bir stock adedi girin!",
+            },
+          ]}
+        >
+          <InputNumber />
+        </Form.Item>
+        <Form.Item
           label="Ürün Açıklaması"
           name="description"
+          initialValue="acıklama"
           rules={[
             {
               required: true,
@@ -96,8 +133,10 @@ const CreateProductPage = () => {
             }}
           />
         </Form.Item>
-        <Form.Item label="Ürün Görselleri (Linkler)" name="img">
-          <UploadImage></UploadImage>
+        <Form.Item label="Ürün Görselleri (Linkler)" name="images">
+          <UploadImage
+            onFileListChange={handleImageFileListChange}
+          ></UploadImage>
         </Form.Item>
         <Button type="primary" htmlType="submit">
           Oluştur
