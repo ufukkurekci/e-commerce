@@ -27,9 +27,10 @@ const ProductsSchema = new Schema(
       type: String,
       required: true,
     },
-    images: {
-      type: [String],
-    },
+    images: [{
+      data: Buffer,
+      contentType: String
+    }],
     description: {
       type: String,
     },

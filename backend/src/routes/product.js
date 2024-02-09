@@ -6,13 +6,13 @@ const upload = multer({
   storage: storage,
   limits: {
     files: 8, // Maximum number of files
-    fileSize: 1024 * 1024 * 25, // Maximum file size (5 MB in this example)
-  }
+    fileSize: 1024 * 1024 * 25, // Maximum file size (25 MB in this example)
+  },
 });
 export default (router) => {
   // create new product routes
 
-  router. post("/product/add", upload.array("images"), async (req, res) => {
+  router.post("/product/add", upload.array("images"), async (req, res) => {
     try {
       const images = req.files.map((file) => ({
         data: file.buffer.toString("base64"),
@@ -23,15 +23,15 @@ export default (router) => {
         name: req.body.name,
         images: images,
         description: req.body.description,
-        price:{
+        price: {
           basePrice: req.body.basePrice,
-          discountPrice: req.body.discountPrice
+          discountPrice: req.body.discountPrice,
         },
         stock: req.body.stock,
       });
 
       await newProduct.save();
-      
+
       res.status(201).json({
         message: "Product created",
         product: newProduct,

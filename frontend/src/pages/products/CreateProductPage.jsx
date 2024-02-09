@@ -12,37 +12,30 @@ const CreateProductPage = () => {
 
   // UploadImage bileşeninden gelen fileList'i güncelleyen fonksiyon
   const handleImageFileListChange = (newFileList) => {
-    const firstFile = newFileList[0];
-    setImageFileList([firstFile]);
-    console.log("UploadImage bileşeninden gelen file");
-    console.log(firstFile); // Dosyayı kontrol et
-
-
-
+    setImageFileList(newFileList);
   };
   const onFinish = async (values) => {
     setLoading(true);
     const parseHTMLToPlainText = (htmlString) => {
-      const doc = new DOMParser().parseFromString(htmlString, 'text/html');
+      const doc = new DOMParser().parseFromString(htmlString, "text/html");
       return doc.body.textContent || "";
     };
+    const formData = new FormData();
+
+    formData.append("name", values.name);
+    formData.append("description", parseHTMLToPlainText(values.description));
+    formData.append("basePrice", values.basePrice);
+    formData.append("discountPrice", values.discountPrice);
+    formData.append("stock", values.stock);
+
+    // Use Promise.all to wait for all asynchronous tasks to complete
+    await Promise.all(
+      imageFileList.map(async (file) => {
+        formData.append("images", file.originFileObj, file.name);
+      })
+    );
+
     try {
-      const formData = new FormData();
-
-      formData.append("name", values.name);
-      formData.append("description", parseHTMLToPlainText(values.description));
-      formData.append("basePrice", values.basePrice);
-      formData.append("discountPrice", values.discountPrice);
-      formData.append("stock", values.stock);
-      imageFileList.forEach((file, index) => {
-        formData.append(`images[${index}]`, file.originFileObj);
-      });
-    formData.append("images", imageFileList[0].originFileObj);
-
-      for (var pair of formData.entries()) {
-        console.log(pair[0] + ": " + pair[1]);
-      }
-      console.log(values.description);
       const response = await fetch(`${apiURL}/product/add`, {
         method: "POST",
         body: formData,
@@ -66,7 +59,7 @@ const CreateProductPage = () => {
         <Form.Item
           label="Ürün İsmi"
           name="name"
-          initialValue="test ürünü" 
+          initialValue="test ürünü"
           rules={[
             {
               required: true,
