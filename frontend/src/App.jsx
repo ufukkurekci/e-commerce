@@ -9,6 +9,7 @@ import ContactPage from "./pages/ContactPage";
 import AdminUserPage from "./pages/admin/AdminUserPage.jsx";
 import "./App.css";
 import CreateProductPage from "./pages/products/CreateProductPage.jsx";
+import ProductPage from "./pages/products/ProductPage.jsx";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
       <Route path="/admin/*">
         <Route path="users" element={<AdminUserPage />}></Route>
         <Route path="products/create" element={<CreateProductPage />}></Route>
+        <Route path="products" element={<ProductPage />}></Route>
       </Route>
     </Routes>
   );
