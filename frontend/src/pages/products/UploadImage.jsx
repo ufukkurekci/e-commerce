@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {  useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import { Modal, Upload } from "antd";
 import PropTypes from "prop-types";
@@ -12,7 +12,7 @@ const getBase64 = (file) =>
     reader.onerror = (error) => reject(error);
   });
 
-const UploadImage = ({ onFileListChange }) => {
+const UploadImage = ({ onFileListChange , imageFileList}) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
@@ -68,8 +68,12 @@ const UploadImage = ({ onFileListChange }) => {
   };
   const handleChange = ({ fileList: newFileList }) => {
      setFileList(newFileList);
+     console.log("upload image çalıstı");
+     console.log(newFileList);
      onFileListChange(newFileList);
-  }
+  };
+  
+
   // console.log(fileList);
   const uploadButton = (
     <button
@@ -94,7 +98,7 @@ const UploadImage = ({ onFileListChange }) => {
       <Upload
         // action="http://localhost:443/api/api/product/add "
         listType="picture-card"
-        fileList={fileList}
+        fileList={imageFileList}
         onPreview={handlePreview}
         onChange={handleChange}
       >
@@ -120,5 +124,6 @@ const UploadImage = ({ onFileListChange }) => {
 export default UploadImage;
 
 UploadImage.propTypes = {
-  onFileListChange:PropTypes.func
+  onFileListChange:PropTypes.func,
+  imageFileList:PropTypes.array
 }

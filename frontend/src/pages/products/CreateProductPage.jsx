@@ -16,14 +16,11 @@ const CreateProductPage = () => {
   };
   const onFinish = async (values) => {
     setLoading(true);
-    const parseHTMLToPlainText = (htmlString) => {
-      const doc = new DOMParser().parseFromString(htmlString, "text/html");
-      return doc.body.textContent || "";
-    };
+
     const formData = new FormData();
 
     formData.append("name", values.name);
-    formData.append("description", parseHTMLToPlainText(values.description));
+    formData.append("description", values.description);
     formData.append("basePrice", values.basePrice);
     formData.append("discountPrice", values.discountPrice);
     formData.append("stock", values.stock);

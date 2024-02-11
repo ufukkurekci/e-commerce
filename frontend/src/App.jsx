@@ -7,9 +7,10 @@ import CartPage from "./pages/CartPage";
 import AuthPage from "./pages/AuthPage";
 import ContactPage from "./pages/ContactPage";
 import AdminUserPage from "./pages/admin/AdminUserPage.jsx";
-import "./App.css";
 import CreateProductPage from "./pages/products/CreateProductPage.jsx";
 import ProductPage from "./pages/products/ProductPage.jsx";
+import UpdateProductPage from "./pages/products/UpdateProductPage.jsx";
+import "./App.css";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
       <Route path="/admin/*">
         <Route path="users" element={<AdminUserPage />}></Route>
         <Route path="products/create" element={<CreateProductPage />}></Route>
+        <Route path="products/update/:id" element={<UpdateProductPage />}></Route>
         <Route path="products" element={<ProductPage />}></Route>
       </Route>
     </Routes>

@@ -28,7 +28,7 @@ const ProductsSchema = new Schema(
       required: true,
     },
     images: [{
-      data: Buffer,
+      data: String,
       contentType: String
     }],
     description: {

@@ -1,8 +1,6 @@
 import { Button, Popconfirm, Space, Table, message } from "antd";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Buffer } from "buffer";
-
 const ProductPage = () => {
   const [dataSource, setDataSource] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -11,20 +9,14 @@ const ProductPage = () => {
 
   const columns = [
     {
-        title: "Özel Sütun",
+        title: "Ürün Görseli",
         dataIndex: "images",
         key: "images",
         render: (images) => {
-          console.log(images[0].data); // Eklendi
-          var buffer = Buffer.from(JSON.stringify(images[0].data));
-        //   console.log(buffer);
-          const base64String = buffer.toString('base64');
-          console.log(`string:${base64String}`);
           return (
             <span>
-              {/* Özel içeriği burada görüntüle */}
               {images && images.length > 0 && (
-                <img src={`data:${images[0].contentType};base64,${base64String}`} alt="Image" />
+                <img src={`data:${images[0].contentType};base64,${images[0].data}`} alt="Image" style={{height:"100px"}} />
               )}
             </span>
           );
@@ -46,17 +38,17 @@ const ProductPage = () => {
       key: "price",
       render: (price) => (
         <span>
-          {price.basePrice}
+          {price.basePrice.toFixed(2)}
         </span>
       ),
     },
     {
-      title: "İndirimli Fiyat",
+      title: "İndirimli Oranı",
       dataIndex: "price",
       key: "price",
       render: (price) => (
         <span>
-          {price.discountPrice}
+          %{price.discountPrice}
         </span>
       ),
     },
@@ -96,7 +88,7 @@ const ProductPage = () => {
   const deleteProduct = async (productId) => {
     try {
       const response = await fetch(
-        `${apiUrl}/api/product/delete/${productId}`,
+        `${apiUrl}/product/delete/${productId}`,
         {
           method: "DELETE",
         }
@@ -123,7 +115,6 @@ const ProductPage = () => {
         const response = await fetch(`${apiUrl}/product/getall`);
         if (response.ok) {
           const data = await response.json();
-          console.log(data);
           setDataSource(data);
         } else {
           message.error("Ürünler çekilemedi.");
@@ -143,6 +134,7 @@ const ProductPage = () => {
       columns={columns}
       rowKey={(record) => record._id}
       loading={loading}
+      pagination={{ pageSize: 5 }}
     />
   );
 };

@@ -15,7 +15,7 @@ export default (router) => {
   router.post("/product/add", upload.array("images"), async (req, res) => {
     try {
       const images = req.files.map((file) => ({
-        data: file.buffer.toString("base64"),
+        data: file.buffer.toString('base64'),
         contentType: file.mimetype,
       }));
 
