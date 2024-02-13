@@ -4,13 +4,14 @@ import { Modal, Upload } from "antd";
 import PropTypes from "prop-types";
 
 
-const getBase64 = (file) =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = (error) => reject(error);
-  });
+// const getBase64 = (file) =>
+//   new Promise((resolve, reject) => {
+//     const reader = new FileReader();
+//     console.log(file);
+//     reader.readAsDataURL(file);
+//     reader.onload = () => resolve(reader.result);
+//     reader.onerror = (error) => reject(error);
+//   });
 
 const UploadImage = ({ onFileListChange , imageFileList}) => {
   const [previewOpen, setPreviewOpen] = useState(false);
@@ -58,7 +59,9 @@ const UploadImage = ({ onFileListChange , imageFileList}) => {
   const handleCancel = () => setPreviewOpen(false);
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
+      file.preview = file.thumbUrl;
+      console.log(file);
+      console.log(file.thumbUrl);
     }
     setPreviewImage(file.url || file.preview);
     setPreviewOpen(true);
@@ -69,7 +72,7 @@ const UploadImage = ({ onFileListChange , imageFileList}) => {
   const handleChange = ({ fileList: newFileList }) => {
      setFileList(newFileList);
      console.log("upload image çalıstı");
-     console.log(newFileList);
+    //  console.log(newFileList);
      onFileListChange(newFileList);
   };
   

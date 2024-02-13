@@ -2,7 +2,7 @@ import { Button, Form, Input, InputNumber, Spin, message } from "antd";
 import ReactQuill from "react-quill";
 import UploadImage from "./UploadImage";
 import { useCallback, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 
 
@@ -12,6 +12,7 @@ const UpdateProductPage = () => {
   const [form] = Form.useForm();
   const [imageFileList, setImageFileList] = useState([]);
   const [fetchCompleted, setFetchCompleted] = useState(false);
+  const navigate = useNavigate();
 
   const apiUrl = import.meta.env.VITE_API_BASE_URL;
   const params = useParams();
@@ -19,29 +20,12 @@ const UpdateProductPage = () => {
 
   // UploadImage bileşeninden gelen fileList'i güncelleyen fonksiyon
   const handleImageFileListChange = useCallback((newFileList) => {
-    console.log("handleImageFileListChange içindeki değer");
+    console.log("handleImageFileListChange worked");
     setImageFileList(newFileList);
-    console.log(`handleImageFileListChange imageFileList:${imageFileList}`);
+    // console.log(`handleImageFileListChange imageFileList:${imageFileList}`);
   }, []);
 
-  // const onFinish = async (values) => {
-  //   setLoading(true);
 
-  //   const formData = new FormData();
-
-  //   formData.append("name", values.name);
-  //   formData.append("description", values.description);
-  //   formData.append("basePrice", values.basePrice);
-  //   formData.append("discountPrice", values.discountPrice);
-  //   formData.append("stock", values.stock);
-
-  //   // Use Promise.all to wait for all asynchronous tasks to complete
-  //   await Promise.all(
-  //     imageFileList.map(async (file) => {
-  //       formData.append("images", file.originFileObj, file.name);
-  //     })
-  //   );
-  // };
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -91,12 +75,63 @@ const UpdateProductPage = () => {
     if (dataSource && dataSource.product && dataSource.product.images) {
       handleImageFileListChange(dataSource.product.images);
     }
-    console.log(` createNewFileList imageFileList:${imageFileList}`);
-  }, [dataSource, handleImageFileListChange,imageFileList]);
+    console.log("fetch sonrası resimler getirildi ");
+  }, [dataSource, handleImageFileListChange]);
+
+  const onFinish = async (values) => {
+    setLoading(true);
+
+    const productData = {
+      name: values.name,
+      images: imageFileList.map((file) => ({
+        name: file.name,
+        originFileObj: {
+          uid: file.originFileObj.uid,
+          name: file.originFileObj.name,
+        },
+        thumbUrl: file.thumbUrl,
+        type: file.type,
+        uid: file.uid,
+      })),
+      description: values.description,
+      brand: "Brand Name",
+      price: {
+        basePrice: values.basePrice,
+        discountPrice: values.discountPrice,
+      },
+      currency: "TRY",
+      stock: values.stock,
+      itemType: "PHYSICAL",
+      reviews: [], // Assuming reviews is an empty array initially
+    };
+    console.log(productData);
+
+    try {
+      const response = await fetch(`${apiUrl}/product/update/${productId}`, {
+        method: "PUT",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(productData),
+      });
+      if (response.ok) {
+        message.success("Ürün başarıyla güncellendi");
+        form.resetFields();
+        navigate("/admin/products");
+        
+      } else {
+        message.error("Ürün güncellenemedi");
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <Spin spinning={loading}>
-      <Form name="basic" layout="vertical" form={form}>
+      <Form name="basic" layout="vertical" form={form} onFinish={onFinish}>
         <Form.Item
           label="Ürün İsmi"
           name="name"

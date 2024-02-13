@@ -22,7 +22,7 @@ const CreateProductPage = () => {
       images: imageFileList.map((file) => ({
         name: file.name,
         originFileObj: {
-          uid: file.originFileObjuid,
+          uid: file.originFileObj.uid,
           name: file.originFileObj.name,
         },
         thumbUrl: file.thumbUrl,
@@ -36,7 +36,7 @@ const CreateProductPage = () => {
         discountPrice: values.discountPrice,
       },
       currency: "TRY",
-      stock: 10,
+      stock: values.stock,
       itemType: "PHYSICAL",
       reviews: [], // Assuming reviews is an empty array initially
     };
