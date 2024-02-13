@@ -4,35 +4,7 @@ import UploadImage from "./UploadImage";
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-const base64StringToFile = (base64String, contentType, index) => {
-  const byteCharacters = atob(base64String);
-  const byteNumbers = new Array(byteCharacters.length);
 
-  for (let i = 0; i < byteCharacters.length; i++) {
-    byteNumbers[i] = byteCharacters.charCodeAt(i);
-  }
-
-  const byteArray = new Uint8Array(byteNumbers);
-  const blob = new Blob([byteArray], { type: contentType });
-
-  // File nesnesini oluştur
-  return new File([blob], `image_${index + 1}`, { type: contentType });
-};
-
-const convertImagesToNewFileList = (images) => {
-  return images.map((image, index) => {
-    return base64StringToFile(image.data, image.contentType, index);
-  });
-};
-
-const createNewFileList = (dataSource, handleImageFileListChange) => {
-  if (dataSource && dataSource.product && dataSource.product.images) {
-    const newFileList = convertImagesToNewFileList(dataSource.product.images);
-    handleImageFileListChange(newFileList);
-    console.log("create new file list içindeki değer");
-    console.log(newFileList);
-  }
-};
 
 const UpdateProductPage = () => {
   const [loading, setLoading] = useState(false);
@@ -52,25 +24,24 @@ const UpdateProductPage = () => {
     console.log(`handleImageFileListChange imageFileList:${imageFileList}`);
   }, []);
 
+  // const onFinish = async (values) => {
+  //   setLoading(true);
 
-  const onFinish = async (values) => {
-    setLoading(true);
+  //   const formData = new FormData();
 
-    const formData = new FormData();
+  //   formData.append("name", values.name);
+  //   formData.append("description", values.description);
+  //   formData.append("basePrice", values.basePrice);
+  //   formData.append("discountPrice", values.discountPrice);
+  //   formData.append("stock", values.stock);
 
-    formData.append("name", values.name);
-    formData.append("description", values.description);
-    formData.append("basePrice", values.basePrice);
-    formData.append("discountPrice", values.discountPrice);
-    formData.append("stock", values.stock);
-
-    // Use Promise.all to wait for all asynchronous tasks to complete
-    await Promise.all(
-      imageFileList.map(async (file) => {
-        formData.append("images", file.originFileObj, file.name);
-      })
-    );
-  };
+  //   // Use Promise.all to wait for all asynchronous tasks to complete
+  //   await Promise.all(
+  //     imageFileList.map(async (file) => {
+  //       formData.append("images", file.originFileObj, file.name);
+  //     })
+  //   );
+  // };
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -82,6 +53,7 @@ const UpdateProductPage = () => {
         const response = await fetch(`${apiUrl}/product/update/${productId}`, {
           method: "PUT",
         });
+
         if (response.ok) {
           const data = await response.json();
           console.log(productId);
@@ -89,7 +61,6 @@ const UpdateProductPage = () => {
           setFetchCompleted(true); 
           console.log(`fetch imageFileList:${imageFileList}`);
           console.log(fetchCompleted);
-        //   console.log(dataSource);
         } else {
           message.error("Ürünler çekilemedi.");
         }
@@ -117,13 +88,15 @@ const UpdateProductPage = () => {
 
   useEffect(() => {
     // Fetch işlemi tamamlandıktan sonra imageFileList'i güncelle
-    createNewFileList(dataSource, handleImageFileListChange);
+    if (dataSource && dataSource.product && dataSource.product.images) {
+      handleImageFileListChange(dataSource.product.images);
+    }
     console.log(` createNewFileList imageFileList:${imageFileList}`);
-  }, [dataSource, handleImageFileListChange]);
+  }, [dataSource, handleImageFileListChange,imageFileList]);
 
   return (
     <Spin spinning={loading}>
-      <Form name="basic" layout="vertical" onFinish={onFinish} form={form}>
+      <Form name="basic" layout="vertical" form={form}>
         <Form.Item
           label="Ürün İsmi"
           name="name"

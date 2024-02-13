@@ -16,8 +16,8 @@ const ReviewsSchema = new Schema({
   user: {
     type: ObjectId,
     required: true,
-    ref: "Users"
-  }
+    ref: "Users",
+  },
 });
 
 const Reviews = mongoose.model("Reviews", ReviewsSchema);
@@ -27,10 +27,30 @@ const ProductsSchema = new Schema(
       type: String,
       required: true,
     },
-    images: [{
-      data: String,
-      contentType: String
-    }],
+    images: [
+      {
+        name: {
+          type: String,
+        },
+        originFileObj: {
+          uid: {
+            type: String,
+          },
+          name: {
+            type: String,
+          },
+        },
+        thumbUrl: {
+          type: String,
+        },
+        type: {
+          type: String,
+        },
+        uid: {
+          type: String,
+        },
+      },
+    ],
     description: {
       type: String,
     },

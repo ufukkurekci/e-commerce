@@ -17,25 +17,38 @@ const CreateProductPage = () => {
   const onFinish = async (values) => {
     setLoading(true);
 
-    const formData = new FormData();
-
-    formData.append("name", values.name);
-    formData.append("description", values.description);
-    formData.append("basePrice", values.basePrice);
-    formData.append("discountPrice", values.discountPrice);
-    formData.append("stock", values.stock);
-
-    // Use Promise.all to wait for all asynchronous tasks to complete
-    await Promise.all(
-      imageFileList.map(async (file) => {
-        formData.append("images", file.originFileObj, file.name);
-      })
-    );
+    const productData = {
+      name: values.name,
+      images: imageFileList.map((file) => ({
+        name: file.name,
+        originFileObj: {
+          uid: file.originFileObjuid,
+          name: file.originFileObj.name,
+        },
+        thumbUrl: file.thumbUrl,
+        type: file.type,
+        uid: file.uid,
+      })),
+      description: values.description,
+      brand: "Brand Name",
+      price: {
+        basePrice: values.basePrice,
+        discountPrice: values.discountPrice,
+      },
+      currency: "TRY",
+      stock: 10,
+      itemType: "PHYSICAL",
+      reviews: [], // Assuming reviews is an empty array initially
+    };
+    console.log(productData);
 
     try {
       const response = await fetch(`${apiURL}/product/add`, {
         method: "POST",
-        body: formData,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(productData),
       });
       if (response.ok) {
         message.success("Ürün başarıyla oluşturuldu");

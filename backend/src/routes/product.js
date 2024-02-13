@@ -12,26 +12,13 @@ const upload = multer({
 export default (router) => {
   // create new product routes
 
-  router.post("/product/add", upload.array("images"), async (req, res) => {
+  router.post("/product/add", async (req, res) => {
     try {
-      const images = req.files.map((file) => ({
-        data: file.buffer.toString('base64'),
-        contentType: file.mimetype,
-      }));
-
-      const newProduct = new Products({
-        name: req.body.name,
-        images: images,
-        description: req.body.description,
-        price: {
-          basePrice: req.body.basePrice,
-          discountPrice: req.body.discountPrice,
-        },
-        stock: req.body.stock,
-      });
+      console.log(req.body);
+      const newProduct = new Products(req.body);
 
       await newProduct.save();
-
+  
       res.status(201).json({
         message: "Product created",
         product: newProduct,

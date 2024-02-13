@@ -9,19 +9,28 @@ const ProductPage = () => {
 
   const columns = [
     {
-        title: "Ürün Görseli",
-        dataIndex: "images",
-        key: "images",
-        render: (images) => {
-          return (
-            <span>
-              {images && images.length > 0 && (
-                <img src={`data:${images[0].contentType};base64,${images[0].data}`} alt="Image" style={{height:"100px"}} />
-              )}
-            </span>
-          );
-        },
+      title: "Ürün Görseli",
+      dataIndex: "images",
+      key: "images",
+      render: (images) => {
+        return (
+          <span>
+            {images && images.length > 0 && (
+              <img
+                src={`data:${
+                  images[0].type
+                };base64,${images[0].thumbUrl.replace(
+                  /^data:image\/\w+;base64,/,
+                  ""
+                )}`}
+                alt="Image"
+                style={{ height: "100px" }}
+              />
+            )}
+          </span>
+        );
       },
+    },
     {
       title: "Ürün Adı",
       dataIndex: "name",
@@ -36,21 +45,13 @@ const ProductPage = () => {
       title: "Fiyat",
       dataIndex: "price",
       key: "price",
-      render: (price) => (
-        <span>
-          {price.basePrice.toFixed(2)}
-        </span>
-      ),
+      render: (price) => <span>{price.basePrice.toFixed(2)}</span>,
     },
     {
       title: "İndirimli Oranı",
       dataIndex: "price",
       key: "price",
-      render: (price) => (
-        <span>
-          %{price.discountPrice}
-        </span>
-      ),
+      render: (price) => <span>%{price.discountPrice}</span>,
     },
     {
       title: "Stok",
@@ -87,12 +88,9 @@ const ProductPage = () => {
 
   const deleteProduct = async (productId) => {
     try {
-      const response = await fetch(
-        `${apiUrl}/product/delete/${productId}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const response = await fetch(`${apiUrl}/product/delete/${productId}`, {
+        method: "DELETE",
+      });
 
       if (response.ok) {
         message.success("Ürün başarıyla silindi.");
