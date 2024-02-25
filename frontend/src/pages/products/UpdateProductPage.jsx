@@ -22,7 +22,6 @@ const UpdateProductPage = () => {
   const handleImageFileListChange = useCallback((newFileList) => {
     console.log("handleImageFileListChange worked");
     setImageFileList(newFileList);
-    // console.log(`handleImageFileListChange imageFileList:${imageFileList}`);
   }, []);
 
 

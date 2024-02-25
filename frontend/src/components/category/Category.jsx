@@ -1,6 +1,13 @@
-import "./Category.css";
 import CategoryItem from "./CategoryItem";
+// import { useState } from "react";
+// import { useNavigate } from "react-router-dom";
+import "./Category.css";
 const Category = () => {
+
+  // const [categories, setCategories] = useState([]);
+  // const navigate = useNavigate();
+  // const apiUrl = import.meta.env.VITE_API_BASE_URL;
+
   return (
     <section className="categories">
       <div className="container">

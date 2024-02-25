@@ -17,12 +17,7 @@ const ProductPage = () => {
           <span>
             {images && images.length > 0 && (
               <img
-                src={`data:${
-                  images[0].type
-                };base64,${images[0].thumbUrl.replace(
-                  /^data:image\/\w+;base64,/,
-                  ""
-                )}`}
+                src={images[0].thumbUrl}
                 alt="Image"
                 style={{ height: "100px" }}
               />

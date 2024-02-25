@@ -1,12 +1,36 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./Product.css";
 import ProductItem from "./ProductItem";
 import PropTypes from "prop-types";
-import productsData from "../../data.json";
+// import productsData from "../../data.json";
 import Slider from "react-slick";
+import { message } from "antd";
 const Product = () => {
-  const [products] = useState(productsData);
+  const [products, setProducts] = useState([]);
+  const [loading, setloading] = useState(true);
+  const apiUrl = import.meta.env.VITE_API_BASE_URL;
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch(`${apiUrl}/product/getall`);
+        if (response.ok) {
+          const data = await response.json();
+          setProducts(data);
+          setloading(false);
+        } else {
+          message.error("Ürünler çekilemedi.");
+        }
+      } catch (error) {
+        console.log("Veri hatası:", error);
+      }
+    };
+    fetchProducts();
+  }, [apiUrl]);
 
+  if (loading) {
+    return;
+  }
+  console.log(products);
   const NextBtn = ({ onClick }) => {
     return (
       <button className="glide__arrow glide__arrow--right" onClick={onClick}>
@@ -63,7 +87,10 @@ const Product = () => {
           <div className="glide__track">
             <Slider {...sliderSettings}>
               {products.map((product) => (
-                <ProductItem productItem={product} key={product.id}></ProductItem>
+                <ProductItem
+                  productItem={product}
+                  key={product._id}
+                ></ProductItem>
               ))}
             </Slider>
           </div>

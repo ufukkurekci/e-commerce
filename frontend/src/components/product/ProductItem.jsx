@@ -10,8 +10,8 @@ const filteredCart = cartItems.find((cartItems) => cartItems.id === productItem.
     <div className="product-item glide__slide glide__slide--active">
       <div className="product-image">
         <a href="#">
-          <img src={productItem.img.singleImage} alt="" className="img1" />
-          <img src={productItem.img.thumbs[1]} alt="" className="img2" />
+          <img src={productItem.images[0].thumbUrl} alt="" className="img1" />
+          <img src={productItem.images[1].thumbUrl} alt="" className="img2" />
         </a>
       </div>
       <div className="product-info">
@@ -37,10 +37,10 @@ const filteredCart = cartItems.find((cartItems) => cartItems.id === productItem.
         </ul>
         <div className="product-prices">
           <strong className="new-price">
-            {`${productItem.price.newPrice.toFixed(2)} TL`}
+            {`${productItem.price.basePrice.toFixed(2)} TL`}
           </strong>
           <span className="old-price">
-          {`${productItem.price.oldPrice.toFixed(2)} TL`}
+          {`${productItem.price.discountPrice.toFixed(2)} TL`}
           </span>
         </div>
         <span className="product-discount">-{productItem.discount}%</span>

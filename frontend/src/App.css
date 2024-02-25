@@ -15,3 +15,6 @@
   .ql-editor{
     min-height: 100px !important;
   }
+  .slick-track{
+    width: auto !important;
+  }
