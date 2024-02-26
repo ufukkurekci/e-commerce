@@ -30,7 +30,6 @@ const Product = () => {
   if (loading) {
     return;
   }
-  console.log(products);
   const NextBtn = ({ onClick }) => {
     return (
       <button className="glide__arrow glide__arrow--right" onClick={onClick}>

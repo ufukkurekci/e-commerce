@@ -11,7 +11,7 @@ const HomePage = () => {
     <React.Fragment>
       <Slider></Slider>
       <Category></Category>
-      <Product></Product>
+      {/* <Product></Product> */}
       <Campains></Campains>
       <Product></Product>
       <Blogs></Blogs>

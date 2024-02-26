@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "./ProductGallery.css";
-import productsData from "../../../data.json";
+// import productsData from "../../../data.json";
 import Slider from "react-slick";
 import PropTypes from "prop-types";
 
@@ -43,13 +43,28 @@ PrevBtn.propTypes = {
 const ProductGallery = ({productGalleryId}) => {
   const [activeImage, setActiveImage] = useState("");
   const [currentProduct, setcurrentProduct] = useState(null);
-
+  const apiUrl = import.meta.env.VITE_API_BASE_URL;
 useEffect(() => {
-  const product = productsData.find(p => p.id === Number(productGalleryId));
-  if(product){
-    setActiveImage(product.img.thumbs[0]);
-    setcurrentProduct(product);
+
+  // const product = productsData.find(p => p._id === Number(productGalleryId));
+
+  const fetchProduct = async () => {
+    try {
+      const response = await fetch(`${apiUrl}/product/get/${productGalleryId}`);
+      if(response.ok) {
+        const data = await response.json();
+        if(data){
+          console.log(data.product.images[0]);
+          setActiveImage(data.product.images[0].thumbUrl);
+          setcurrentProduct(data.product);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
+  fetchProduct();
+
 
 },[productGalleryId])
 
@@ -64,15 +79,15 @@ useEffect(() => {
   return (
     <div className="product-gallery">
       <div className="single-image-wrapper">
-        <img src={`/${activeImage}`} id="single-image" alt="" />
+        <img src={`${activeImage}`} id="single-image" alt="" />
       </div>
       <div className="product-thumb">
         <div className="glide__track" data-glide-el="track">
           <ol className="gallery-thumbs glide__slides">
             <Slider {...sliderSettings}>
-              {currentProduct && currentProduct.img.thumbs.map((item, index) => (
+              {currentProduct && currentProduct.images.map((item, index) => (
                 <li
-                  onClick={() => setActiveImage(item)}
+                  onClick={() => setActiveImage(item.thumbUrl)}
                   className="glide__slide"
                   key={index}
                 >
@@ -80,7 +95,7 @@ useEffect(() => {
                     className={`img-fluid ${
                       item === activeImage ? "active" : ""
                     }`}
-                    src={`/${item}`}
+                    src={`${item.thumbUrl}`}
                     alt=""
                   />
                 </li>

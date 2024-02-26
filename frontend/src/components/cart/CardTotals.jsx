@@ -7,7 +7,7 @@ const CardTotals = () => {
 
   const [fastCargoChecked, setfastCargoChecked] = useState(false);
   const cartItemTotals = cartItems.map((item) =>{
-    const itemTotal = item.price.newPrice * item.quantity;
+    const itemTotal = item.discountedPrice * item.quantity;
     return itemTotal;
   });
 
@@ -37,7 +37,7 @@ const CardTotals = () => {
               <ul>
                 <li>
                   <label>
-                    Fast Cargo: $15.00
+                    Ücretsiz Kargo
                     <input type="checkbox" id="fast-cargo"
                     checked={fastCargoChecked} onChange={() => setfastCargoChecked(!fastCargoChecked)} />
                   </label>
