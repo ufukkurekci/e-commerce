@@ -1,14 +1,22 @@
 import Products from "../db/products";
 import ApiError from "../error/ApiError";
-const multer = require("multer");
-const storage = multer.memoryStorage();
-const upload = multer({
-  storage: storage,
-  limits: {
-    files: 8, // Maximum number of files
-    fileSize: 1024 * 1024 * 25, // Maximum file size (25 MB in this example)
+const express = require('express');
+const multer = require('multer');
+const path = require('path');
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'public/uploads/');
+  },
+  filename: function (req, file, cb) {
+    const dosyaAdi = 'spesifik_isim' + path.extname(file.originalname);
+    const dosyaYolu = path.join('public/uploads/', dosyaAdi);
+    console.log("filename");
+    cb(null, dosyaAdi);
+
+    req.spesifikDosya = { dosyaAdi, dosyaYolu };
   },
 });
+const upload = multer({ storage });
 export default (router) => {
   // create new product routes
 
@@ -27,6 +35,23 @@ export default (router) => {
       console.log(error);
       throw new ApiError(error, 400, "product creation error");
     }
+  });
+
+  // upload image 
+  router.post('/upload', upload.single('file'), async (req, res) => {
+    if (!req.file) {
+      console.log(req.file);
+      return res.status(400).json({ error: 'Dosya yüklenemedi.' });
+    }
+    if(res.status == 200){
+      console.log("success");
+    }
+    console.log("worked");
+  
+    const uploadedFilePath = req.file.path;
+    console.log('Dosya yüklendi ve kaydedildi:', uploadedFilePath);
+  
+    await res.json({ message: 'Dosya başarıyla yüklendi ve kaydedildi.' });
   });
   // all read
   router.get("/product/getall", async (req, res) => {

@@ -1,67 +1,23 @@
-import {  useState } from "react";
+import { useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import { Modal, Upload } from "antd";
-import PropTypes from "prop-types";
-
-
-// const getBase64 = (file) =>
-//   new Promise((resolve, reject) => {
-//     const reader = new FileReader();
-//     console.log(file);
-//     reader.readAsDataURL(file);
-//     reader.onload = () => resolve(reader.result);
-//     reader.onerror = (error) => reject(error);
-//   });
-
-const UploadImage = ({ onFileListChange , imageFileList}) => {
+import axios from "axios";
+const getBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+const UploadImage = () => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
-
-  const [fileList, setFileList] = useState([
-    // {
-    //   uid: "-1",
-    //   name: "image.png",
-    //   status: "done",
-    //   url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-    // },
-    // {
-    //   uid: "-2",
-    //   name: "image.png",
-    //   status: "done",
-    //   url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-    // },
-    // {
-    //   uid: "-3",
-    //   name: "image.png",
-    //   status: "done",
-    //   url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-    // },
-    // {
-    //   uid: "-4",
-    //   name: "image.png",
-    //   status: "done",
-    //   url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-    // },
-    // {
-    //   uid: "-xxx",
-    //   percent: 50,
-    //   name: "image.png",
-    //   status: "uploading",
-    //   url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-    // },
-    // {
-    //   uid: "-5",
-    //   name: "image.png",
-    //   status: "error",
-    // },
-  ]);
+  const [fileList, setFileList] = useState([]);
   const handleCancel = () => setPreviewOpen(false);
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
-      file.preview = file.thumbUrl;
-      console.log(file);
-      console.log(file.thumbUrl);
+      file.preview = await getBase64(file.originFileObj);
     }
     setPreviewImage(file.url || file.preview);
     setPreviewOpen(true);
@@ -69,15 +25,7 @@ const UploadImage = ({ onFileListChange , imageFileList}) => {
       file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
     );
   };
-  const handleChange = ({ fileList: newFileList }) => {
-     setFileList(newFileList);
-     console.log("upload image çalıstı");
-    //  console.log(newFileList);
-     onFileListChange(newFileList);
-  };
-  
-
-  // console.log(fileList);
+  const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
   const uploadButton = (
     <button
       style={{
@@ -96,12 +44,38 @@ const UploadImage = ({ onFileListChange , imageFileList}) => {
       </div>
     </button>
   );
+  const customRequest = async ({ file, onSuccess, onError }) => {
+    const formData = new FormData();
+    if (file) {
+      formData.append("file", file,file.name);
+
+      try {
+        const response = await axios.post(
+          "http://localhost:443/api/upload",
+          formData
+        );
+
+        console.log("service result", response.data);
+
+        console.log("FormData Content:");
+        formData.forEach((value, key) => {
+          console.log(`${key}: ${value}`);
+        });
+
+        console.log("File upload successful:");
+        onSuccess(); // Invoke onSuccess to signal that the file upload is successful
+      } catch (error) {
+        console.error("Error:", error);
+        onError(error); // Invoke onError to signal that an error occurred during file upload
+      }
+    }
+  };
   return (
     <>
       <Upload
-        // action="http://localhost:443/api/api/product/add "
+        customRequest={customRequest} // veya {customRequest} methodu gircez
         listType="picture-card"
-        fileList={imageFileList}
+        fileList={fileList}
         onPreview={handlePreview}
         onChange={handleChange}
       >
@@ -125,8 +99,3 @@ const UploadImage = ({ onFileListChange , imageFileList}) => {
   );
 };
 export default UploadImage;
-
-UploadImage.propTypes = {
-  onFileListChange:PropTypes.func,
-  imageFileList:PropTypes.array
-}

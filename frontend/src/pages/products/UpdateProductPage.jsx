@@ -198,7 +198,7 @@ const UpdateProductPage = () => {
         </Form.Item>
         {dataSource && ( // Render child component only if fetch is completed
           <Form.Item label="Ürün Görselleri (Linkler)" name="images">
-            <UploadImage onFileListChange={handleImageFileListChange} imageFileList={imageFileList}></UploadImage>
+            <UploadImage fileList={imageFileList} onChange={handleImageFileListChange}></UploadImage>
           </Form.Item>
         )}
         <Button type="primary" htmlType="submit">
