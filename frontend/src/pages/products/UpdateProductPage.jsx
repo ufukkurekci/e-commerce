@@ -11,7 +11,6 @@ const UpdateProductPage = () => {
   const [dataSource, setDataSource] = useState([]);
   const [form] = Form.useForm();
   const [imageFileList, setImageFileList] = useState([]);
-  const [fetchCompleted, setFetchCompleted] = useState(false);
   const navigate = useNavigate();
 
   const apiUrl = import.meta.env.VITE_API_BASE_URL;
@@ -39,11 +38,7 @@ const UpdateProductPage = () => {
 
         if (response.ok) {
           const data = await response.json();
-          console.log(productId);
           setDataSource(data);
-          setFetchCompleted(true); 
-          console.log(`fetch imageFileList:${imageFileList}`);
-          console.log(fetchCompleted);
         } else {
           message.error("Ürünler çekilemedi.");
         }
@@ -84,10 +79,7 @@ const UpdateProductPage = () => {
       name: values.name,
       images: imageFileList.map((file) => ({
         name: file.name,
-        originFileObj: {
-          uid: file.originFileObj.uid,
-          name: file.originFileObj.name,
-        },
+        originFileObj: file.originFileObj,
         thumbUrl: file.thumbUrl,
         type: file.type,
         uid: file.uid,
