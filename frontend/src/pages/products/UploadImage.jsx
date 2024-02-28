@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import { Modal, Upload } from "antd";
-import axios from "axios";
+// import axios from "axios";
+import PropTypes from "prop-types";
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -9,11 +10,12 @@ const getBase64 = (file) =>
     reader.onload = () => resolve(reader.result);
     reader.onerror = (error) => reject(error);
   });
-const UploadImage = () => {
+  const UploadImage = ({ onFileListChange , imageFileList , customRequest}) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
   const [fileList, setFileList] = useState([]);
+  // const apiUrl = import.meta.env.VITE_API_BASE_URL;
   const handleCancel = () => setPreviewOpen(false);
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
@@ -25,7 +27,14 @@ const UploadImage = () => {
       file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
     );
   };
-  const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
+  const handleChange = ({ fileList: newFileList }) => {
+    setFileList(newFileList);
+    console.log("upload image çalıstı");
+   //  console.log(newFileList);
+    onFileListChange(newFileList);
+    customRequest(newFileList);
+    console.log(newFileList);
+ };
   const uploadButton = (
     <button
       style={{
@@ -44,38 +53,36 @@ const UploadImage = () => {
       </div>
     </button>
   );
-  const customRequest = async ({ file, onSuccess, onError }) => {
-    const formData = new FormData();
-    if (file) {
-      formData.append("file", file,file.name);
+  // const customRequest = async (newFileList) => {
+  //   const formData = new FormData();
+  //   if (newFileList && newFileList.length > 0) {
+  //     newFileList.forEach((file) => {
+  //       formData.append("files", file.originFileObj, file.name);
+  //     });
+  //     try {
+  //       const response = await axios.post(`${apiUrl}/product/upload/`,formData);
 
-      try {
-        const response = await axios.post(
-          "http://localhost:443/api/upload",
-          formData
-        );
+  //       console.log("service result", response.data);
 
-        console.log("service result", response.data);
+  //       console.log("FormData Content:");
+  //       formData.forEach((value, key) => {
+  //         console.log(`${key}: ${value}`);
+  //       });
 
-        console.log("FormData Content:");
-        formData.forEach((value, key) => {
-          console.log(`${key}: ${value}`);
-        });
-
-        console.log("File upload successful:");
-        onSuccess(); // Invoke onSuccess to signal that the file upload is successful
-      } catch (error) {
-        console.error("Error:", error);
-        onError(error); // Invoke onError to signal that an error occurred during file upload
-      }
-    }
-  };
+  //       console.log("File upload successful:");
+  //       // onSuccess(); // Invoke onSuccess to signal that the file upload is successful
+  //     } catch (error) {
+  //       console.error("Error:", error);
+  //       // onError(error); // Invoke onError to signal that an error occurred during file upload
+  //     }
+  //   }
+  // };
   return (
     <>
       <Upload
-        customRequest={customRequest} // veya {customRequest} methodu gircez
+        // customRequest={customRequest} // veya {customRequest} methodu gircez
         listType="picture-card"
-        fileList={fileList}
+        fileList={imageFileList}
         onPreview={handlePreview}
         onChange={handleChange}
       >
@@ -99,3 +106,9 @@ const UploadImage = () => {
   );
 };
 export default UploadImage;
+
+UploadImage.propTypes = {
+  onFileListChange:PropTypes.func,
+  imageFileList:PropTypes.array,
+  customRequest:PropTypes.func
+}

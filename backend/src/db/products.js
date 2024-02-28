@@ -32,15 +32,8 @@ const ProductsSchema = new Schema(
         name: {
           type: String,
         },
-        originFileObj: {
-          uid: {
-            type: String,
-          },
-          name: {
-            type: String,
-          },
-        },
-        thumbUrl: {
+
+        PathUrl: {
           type: String,
         },
         type: {

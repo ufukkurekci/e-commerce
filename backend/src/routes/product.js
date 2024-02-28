@@ -1,23 +1,34 @@
 import Products from "../db/products";
 import ApiError from "../error/ApiError";
-const express = require('express');
-const multer = require('multer');
-const path = require('path');
+const express = require("express");
+const multer = require("multer");
+const path = require("path");
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'public/uploads/');
+    cb(null, "uploads/");
   },
-  filename: function (req, file, cb) {
-    const dosyaAdi = 'spesifik_isim' + path.extname(file.originalname);
-    const dosyaYolu = path.join('public/uploads/', dosyaAdi);
-    console.log("filename");
-    cb(null, dosyaAdi);
 
-    req.spesifikDosya = { dosyaAdi, dosyaYolu };
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + "-" + file.originalname);
   },
 });
-const upload = multer({ storage });
+
+const upload = multer({ storage: storage });
 export default (router) => {
+
+  // upload image
+  router.post("/product/upload", upload.array("files"), async (req, res) => {
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json({ error: "Dosya yüklenemedi." });
+    }
+    console.log("worked");
+
+    const uploadedFilesPaths = req.files.map(file => file.path);
+    console.log("Dosyalar yüklendi ve kaydedildi:", uploadedFilesPaths);
+
+    await res.json({ message: "Dosya başarıyla yüklendi ve kaydedildi." });
+  });
   // create new product routes
 
   router.post("/product/add", async (req, res) => {
@@ -26,7 +37,7 @@ export default (router) => {
       const newProduct = new Products(req.body);
 
       await newProduct.save();
-  
+
       res.status(201).json({
         message: "Product created",
         product: newProduct,
@@ -37,22 +48,7 @@ export default (router) => {
     }
   });
 
-  // upload image 
-  router.post('/upload', upload.single('file'), async (req, res) => {
-    if (!req.file) {
-      console.log(req.file);
-      return res.status(400).json({ error: 'Dosya yüklenemedi.' });
-    }
-    if(res.status == 200){
-      console.log("success");
-    }
-    console.log("worked");
-  
-    const uploadedFilePath = req.file.path;
-    console.log('Dosya yüklendi ve kaydedildi:', uploadedFilePath);
-  
-    await res.json({ message: 'Dosya başarıyla yüklendi ve kaydedildi.' });
-  });
+
   // all read
   router.get("/product/getall", async (req, res) => {
     try {

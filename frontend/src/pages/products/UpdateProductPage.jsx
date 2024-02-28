@@ -21,6 +21,7 @@ const UpdateProductPage = () => {
   const handleImageFileListChange = useCallback((newFileList) => {
     console.log("handleImageFileListChange worked");
     setImageFileList(newFileList);
+    console.log(imageFileList);
   }, []);
 
 
@@ -68,6 +69,8 @@ const UpdateProductPage = () => {
     // Fetch işlemi tamamlandıktan sonra imageFileList'i güncelle
     if (dataSource && dataSource.product && dataSource.product.images) {
       handleImageFileListChange(dataSource.product.images);
+      console.log(dataSource.product.images);
+      console.log(imageFileList);
     }
     console.log("fetch sonrası resimler getirildi ");
   }, [dataSource, handleImageFileListChange]);
@@ -190,7 +193,7 @@ const UpdateProductPage = () => {
         </Form.Item>
         {dataSource && ( // Render child component only if fetch is completed
           <Form.Item label="Ürün Görselleri (Linkler)" name="images">
-            <UploadImage fileList={imageFileList} onChange={handleImageFileListChange}></UploadImage>
+            <UploadImage onFileListChange={handleImageFileListChange} imageFileList={imageFileList}></UploadImage>
           </Form.Item>
         )}
         <Button type="primary" htmlType="submit">

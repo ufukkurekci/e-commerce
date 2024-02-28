@@ -3,6 +3,7 @@ import { useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import UploadImage from "./UploadImage";
+import axios from "axios";
 
 const CreateProductPage = () => {
   const [loading, setLoading] = useState(false);
@@ -14,6 +15,33 @@ const CreateProductPage = () => {
   const handleImageFileListChange = (newFileList) => {
     setImageFileList(newFileList);
   };
+
+  const customRequest = async (newFileList) => {
+    const formData = new FormData();
+    if (newFileList && newFileList.length > 0) {
+      newFileList.forEach((file) => {
+        formData.append("files", file.originFileObj, file.name);
+      });
+      try {
+        const response = await axios.post(`${apiURL}/product/upload/`,formData);
+
+        console.log("service result", response.data);
+
+        console.log("FormData Content:");
+        formData.forEach((value, key) => {
+          console.log(`${key}: ${value}`);
+        });
+
+        console.log("File upload successful:");
+        // onSuccess(); // Invoke onSuccess to signal that the file upload is successful
+      } catch (error) {
+        console.error("Error:", error);
+        // onError(error); // Invoke onError to signal that an error occurred during file upload
+      }
+    }
+  };
+
+
   const onFinish = async (values) => {
     setLoading(true);
 
@@ -21,13 +49,7 @@ const CreateProductPage = () => {
       name: values.name,
       images: imageFileList.map((file) => ({
         name: file.name,
-        originFileObj: {
-          uid: file.originFileObj.uid,
-          name: file.originFileObj.name,
-        },
-        thumbUrl: file.thumbUrl,
-        type: file.type,
-        uid: file.uid,
+        pathUrl: file.path
       })),
       description: values.description,
       brand: "Brand Name",
@@ -50,8 +72,9 @@ const CreateProductPage = () => {
         },
         body: JSON.stringify(productData),
       });
-      if (response.ok) {
+      if (response.ok === false) {
         message.success("Ürün başarıyla oluşturuldu");
+        customRequest(imageFileList);
         form.resetFields();
       } else {
         message.error("Ürün oluşturulamadı");
@@ -139,6 +162,7 @@ const CreateProductPage = () => {
         <Form.Item label="Ürün Görselleri (Linkler)" name="images">
           <UploadImage
             onFileListChange={handleImageFileListChange}
+            customRequest={customRequest}
           ></UploadImage>
         </Form.Item>
         <Button type="primary" htmlType="submit">
