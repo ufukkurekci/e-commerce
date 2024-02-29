@@ -16,7 +16,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 export default (router) => {
-
   // upload image
   router.post("/product/upload", upload.array("files"), async (req, res) => {
     if (!req.files || req.files.length === 0) {
@@ -24,17 +23,31 @@ export default (router) => {
     }
     console.log("worked");
 
-    const uploadedFilesPaths = req.files.map(file => file.path);
+    const uploadedFilesPaths = req.files.map((file) => file.path);
     console.log("Dosyalar yüklendi ve kaydedildi:", uploadedFilesPaths);
 
     await res.json({ message: "Dosya başarıyla yüklendi ve kaydedildi." });
   });
   // create new product routes
 
-  router.post("/product/add", async (req, res) => {
+  router.post("/product/add", upload.array("files"), async (req, res) => {
     try {
       console.log(req.body);
-      const newProduct = new Products(req.body);
+      console.log(req.body.product);
+
+    const productData = JSON.parse(req.body.product);
+
+    // FormData ile gönderilen dosya bilgilerini al
+    const fileData = req.files.map((file) => ({
+      imageName: file.filename,
+      pathUrl: file.path,
+    }));
+    
+    // Yeni bir Products nesnesi oluştur ve kaydet
+    const newProduct = new Products({
+      ...productData,
+      images: fileData,
+    });
 
       await newProduct.save();
 
@@ -47,7 +60,6 @@ export default (router) => {
       throw new ApiError(error, 400, "product creation error");
     }
   });
-
 
   // all read
   router.get("/product/getall", async (req, res) => {

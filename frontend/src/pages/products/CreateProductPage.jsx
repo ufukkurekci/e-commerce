@@ -16,41 +16,11 @@ const CreateProductPage = () => {
     setImageFileList(newFileList);
   };
 
-  const customRequest = async (newFileList) => {
-    const formData = new FormData();
-    if (newFileList && newFileList.length > 0) {
-      newFileList.forEach((file) => {
-        formData.append("files", file.originFileObj, file.name);
-      });
-      try {
-        const response = await axios.post(`${apiURL}/product/upload/`,formData);
-
-        console.log("service result", response.data);
-
-        console.log("FormData Content:");
-        formData.forEach((value, key) => {
-          console.log(`${key}: ${value}`);
-        });
-
-        console.log("File upload successful:");
-        // onSuccess(); // Invoke onSuccess to signal that the file upload is successful
-      } catch (error) {
-        console.error("Error:", error);
-        // onError(error); // Invoke onError to signal that an error occurred during file upload
-      }
-    }
-  };
-
-
   const onFinish = async (values) => {
     setLoading(true);
 
     const productData = {
       name: values.name,
-      images: imageFileList.map((file) => ({
-        name: file.name,
-        pathUrl: file.path
-      })),
       description: values.description,
       brand: "Brand Name",
       price: {
@@ -63,18 +33,20 @@ const CreateProductPage = () => {
       reviews: [], // Assuming reviews is an empty array initially
     };
     console.log(productData);
+    console.log(JSON.stringify(productData));
+
+    const formdata = new FormData();
+    formdata.append("product", JSON.stringify(productData));
+    if (imageFileList && imageFileList.length > 0) {
+      imageFileList.forEach((file) => {
+        formdata.append("files", file.originFileObj, file.name);
+      })
+    }
 
     try {
-      const response = await fetch(`${apiURL}/product/add`, {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(productData),
-      });
-      if (response.ok === false) {
+      const response = await axios.post(`${apiURL}/product/add`,formdata);
+      if (response.status === 201) {
         message.success("Ürün başarıyla oluşturuldu");
-        customRequest(imageFileList);
         form.resetFields();
       } else {
         message.error("Ürün oluşturulamadı");
@@ -162,7 +134,6 @@ const CreateProductPage = () => {
         <Form.Item label="Ürün Görselleri (Linkler)" name="images">
           <UploadImage
             onFileListChange={handleImageFileListChange}
-            customRequest={customRequest}
           ></UploadImage>
         </Form.Item>
         <Button type="primary" htmlType="submit">

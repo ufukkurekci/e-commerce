@@ -29,19 +29,13 @@ const ProductsSchema = new Schema(
     },
     images: [
       {
-        name: {
+        imageName: {
           type: String,
         },
 
-        PathUrl: {
+        pathUrl: {
           type: String,
-        },
-        type: {
-          type: String,
-        },
-        uid: {
-          type: String,
-        },
+        }
       },
     ],
     description: {

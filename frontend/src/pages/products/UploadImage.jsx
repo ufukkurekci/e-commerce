@@ -10,7 +10,7 @@ const getBase64 = (file) =>
     reader.onload = () => resolve(reader.result);
     reader.onerror = (error) => reject(error);
   });
-  const UploadImage = ({ onFileListChange , imageFileList , customRequest}) => {
+  const UploadImage = ({ onFileListChange , imageFileList}) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
@@ -32,7 +32,6 @@ const getBase64 = (file) =>
     console.log("upload image çalıstı");
    //  console.log(newFileList);
     onFileListChange(newFileList);
-    customRequest(newFileList);
     console.log(newFileList);
  };
   const uploadButton = (
@@ -110,5 +109,4 @@ export default UploadImage;
 UploadImage.propTypes = {
   onFileListChange:PropTypes.func,
   imageFileList:PropTypes.array,
-  customRequest:PropTypes.func
 }
