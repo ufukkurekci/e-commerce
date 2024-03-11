@@ -27,6 +27,10 @@ const CreateProductPage = () => {
         basePrice: values.basePrice,
         discountPrice: values.discountPrice,
       },
+      images:imageFileList.map((file) => ({
+        thumbUrl:file.thumbUrl,
+        imageName:file.name
+      })),
       currency: "TRY",
       stock: values.stock,
       itemType: "PHYSICAL",

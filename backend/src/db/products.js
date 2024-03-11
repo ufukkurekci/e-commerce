@@ -35,7 +35,10 @@ const ProductsSchema = new Schema(
 
         pathUrl: {
           type: String,
-        }
+        },
+        thumbUrl: {
+          type: String,
+        },
       },
     ],
     description: {

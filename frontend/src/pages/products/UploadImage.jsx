@@ -19,9 +19,10 @@ const getBase64 = (file) =>
   const handleCancel = () => setPreviewOpen(false);
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
+      // file.preview = await getBase64(file.originFileObj);
+      file.preview = file;
     }
-    setPreviewImage(file.url || file.preview);
+    setPreviewImage("uploads\\1710158841388-taylor-kiser-1YhSMc1IywE-unsplash.jpg");
     setPreviewOpen(true);
     setPreviewTitle(
       file.name || file.url.substring(file.url.lastIndexOf("/") + 1)

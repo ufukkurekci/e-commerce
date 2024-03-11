@@ -49,7 +49,7 @@ app.use(helmet());
 
 
 app.use(express.json({
-    limit: "1mb"
+    limit: "10mb"
 }));
 
 app.use(express.urlencoded({

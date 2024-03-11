@@ -36,18 +36,21 @@ export default (router) => {
       console.log(req.body.product);
 
     const productData = JSON.parse(req.body.product);
-
+    let images = productData.images;
     // FormData ile gönderilen dosya bilgilerini al
     const fileData = req.files.map((file) => ({
-      imageName: file.filename,
+      imageName: file.originalname,
       pathUrl: file.path,
     }));
+    for (let i = 0; i < images.length; i++) {
+      let matchingFileData = fileData.find(item => item.imageName === images[i].imageName)
+      images[i].imageName = matchingFileData.imageName;
+      images[i].pathUrl = matchingFileData.pathUrl;
+    }
+
     
     // Yeni bir Products nesnesi oluştur ve kaydet
-    const newProduct = new Products({
-      ...productData,
-      images: fileData,
-    });
+    const newProduct = new Products(productData);
 
       await newProduct.save();
 
