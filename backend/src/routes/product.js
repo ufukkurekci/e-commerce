@@ -1,8 +1,6 @@
 import Products from "../db/products";
 import ApiError from "../error/ApiError";
-const express = require("express");
 const multer = require("multer");
-const path = require("path");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -16,38 +14,26 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 export default (router) => {
-  // upload image
-  router.post("/product/upload", upload.array("files"), async (req, res) => {
-    if (!req.files || req.files.length === 0) {
-      return res.status(400).json({ error: "Dosya yüklenemedi." });
-    }
-    console.log("worked");
-
-    const uploadedFilesPaths = req.files.map((file) => file.path);
-    console.log("Dosyalar yüklendi ve kaydedildi:", uploadedFilesPaths);
-
-    await res.json({ message: "Dosya başarıyla yüklendi ve kaydedildi." });
-  });
-  // create new product routes
 
   router.post("/product/add", upload.array("files"), async (req, res) => {
     try {
-      console.log(req.body);
-      console.log(req.body.product);
+      // console.log(req.body);
 
-    const productData = JSON.parse(req.body.product);
+      // console.log(req.body.product);
 
-    // FormData ile gönderilen dosya bilgilerini al
-    const fileData = req.files.map((file) => ({
-      imageName: file.filename,
-      pathUrl: file.path,
-    }));
-    
-    // Yeni bir Products nesnesi oluştur ve kaydet
-    const newProduct = new Products({
-      ...productData,
-      images: fileData,
-    });
+      const productData = JSON.parse(req.body.product);
+
+      const pathUrls = req.files.map((file) => ({ pathUrl: file.path }));
+
+      // Eksik olan pathUrl'leri doldur
+      productData.images.forEach((image, index) => {
+        if (!image.pathUrl) {
+          productData.images[index].pathUrl = pathUrls.shift().pathUrl;
+        }
+      });
+
+      // Yeni bir Products nesnesi oluştur ve kaydet
+      const newProduct = new Products(productData);
 
       await newProduct.save();
 
@@ -73,15 +59,22 @@ export default (router) => {
   });
 
   // get produts by id
-
   router.get("/product/get/:id", async (req, res) => {
     try {
       const product = await Products.findById(req.params.id);
+
       if (!product) {
         throw new ApiError("Product not found", 404, "product not found");
       }
+      const imagesUrls = product.images.map((image) => ({
+        imageName: image.imageName,
+        pathUrl: image.pathUrl,
+        type: image.type,
+      }));
+
       res.status(200).json({
-        product,
+        ...product._doc,
+        images: imagesUrls,
       });
     } catch (error) {
       throw new ApiError(error, 500, "product get error");
@@ -100,14 +93,21 @@ export default (router) => {
     });
   });
 
-  router.put("/product/update/:id", async (req, res) => {
+  router.post("/product/update/:id", upload.array("files"), async (req, res) => {
     try {
       const existproduct = await Products.findById(req.params.id);
-      const updates = req.body;
       if (!existproduct) {
         throw new ApiError("Product not found", 404, "product not found");
       }
+      const updates = JSON.parse(req.body.product);
 
+      const pathUrls = req.files.map((file) => ({ pathUrl: file.path }));
+
+      updates.images.forEach((image,index) => {
+        if(!image.pathUrl) {
+          updates.images[index].pathUrl = pathUrls.shift().pathUrl;
+        }
+      });
       const updatedProduct = await Products.findByIdAndUpdate(
         existproduct.id,
         updates,

@@ -5,6 +5,7 @@ import { CartContext } from "../../context/CardProvider";
 import { Link } from "react-router-dom";
 const ProductItem = ({ productItem}) => {
 const {cartItems,addToCart} = useContext(CartContext);
+const baseUrl = import.meta.env.VITE_BASE_URL;
 const filteredCart = cartItems.find((cartItems) => cartItems._id === productItem._id);
 
 //calculate discountedPrice
@@ -17,8 +18,9 @@ const discountedPrice = basePrice - (basePrice * discountRate) / 100;
     <div className="product-item glide__slide glide__slide--active">
       <div className="product-image">
         <a href="#">
-          <img src={productItem.images[0].thumbUrl} alt="" className="img1" />
-          <img src={productItem.images[1].thumbUrl} alt="" className="img2" />
+        <img src={baseUrl + (productItem.images[0]?.pathUrl || '')} alt="" className="img1" />
+        <img src={baseUrl + (productItem.images[1]?.pathUrl || productItem.images[0]?.pathUrl || '')} alt="" className="img2" />
+
         </a>
       </div>
       <div className="product-info">
@@ -57,7 +59,8 @@ const discountedPrice = basePrice - (basePrice * discountRate) / 100;
             onClick={() => addToCart({
               ...productItem,
               discountedPrice: discountedPrice,
-            })}
+            })
+          }
             disabled={filteredCart}
           >
             <i className="bi bi-basket-fill"></i>

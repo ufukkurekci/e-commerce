@@ -21,12 +21,15 @@ const CardProvider = ({ children }) => {
         quantity: cartItem.quantity ? cartItem.quantity : 1,
     }
 ]);
+console.log("addToCart",cartItem);
   };
 
   const removeFromCart = (id) => {
     return setCartItems((prevItems) =>
-      prevItems.filter((item) => item.id !== id)
+      prevItems.filter((item) => item._id !== id)
+      
     );
+    
   };
 
   return (

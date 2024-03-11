@@ -29,13 +29,24 @@ const ProductsSchema = new Schema(
     },
     images: [
       {
+        lastModified:{
+          type: Number,
+        },
+        lastModifiedDate:{
+          type: Date,
+        },
         imageName: {
           type: String,
         },
-
         pathUrl: {
           type: String,
-        }
+        },
+        thumbUrl:{
+          type: String,
+        },
+        type:{
+          type: String,
+        },
       },
     ],
     description: {

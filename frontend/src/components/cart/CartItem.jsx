@@ -10,7 +10,7 @@ const CartItem = ({ cartItem }) => {
         <img src={cartItem.images[0].thumbUrl} alt="" />
         <i
           className="bi bi-x delete-cart"
-          onClick={() => removeFromCart(cartItem.id)}
+          onClick={() => removeFromCart(cartItem._id)}
         ></i>
       </td>
       <td>{cartItem.name}</td>

@@ -3,8 +3,7 @@ import ReactQuill from "react-quill";
 import UploadImage from "./UploadImage";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-
-
+import axios from "axios";
 
 const UpdateProductPage = () => {
   const [loading, setLoading] = useState(false);
@@ -14,6 +13,7 @@ const UpdateProductPage = () => {
   const navigate = useNavigate();
 
   const apiUrl = import.meta.env.VITE_API_BASE_URL;
+  const baseUrl = import.meta.env.VITE_BASE_URL;
   const params = useParams();
   const productId = params.id;
 
@@ -24,8 +24,6 @@ const UpdateProductPage = () => {
     console.log(imageFileList);
   }, []);
 
-
-
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
@@ -33,13 +31,14 @@ const UpdateProductPage = () => {
       try {
         console.log(productId);
 
-        const response = await fetch(`${apiUrl}/product/update/${productId}`, {
-          method: "PUT",
+        const response = await fetch(`${apiUrl}/product/get/${productId}`, {
+          method: "GET",
         });
 
         if (response.ok) {
           const data = await response.json();
           setDataSource(data);
+          console.log(data);
         } else {
           message.error("Ürünler çekilemedi.");
         }
@@ -54,65 +53,128 @@ const UpdateProductPage = () => {
 
   useEffect(() => {
     // Fetch işlemi tamamlandıktan sonra formu doldur
-    if (dataSource && dataSource.product) {
+    if (dataSource._id !== undefined) {
       form.setFieldsValue({
-        name: dataSource.product.name,
-        basePrice: dataSource.product.price.basePrice,
-        discountPrice: dataSource.product.price.discountPrice,
-        stock: dataSource.product.stock,
-        description: dataSource.product.description,
+        name: dataSource.name,
+        basePrice: dataSource.price.basePrice,
+        discountPrice: dataSource.price.discountPrice,
+        stock: dataSource.stock,
+        description: dataSource.description,
       });
     }
   }, [dataSource, form]);
 
   useEffect(() => {
+    const getBase64 = (file) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+
     // Fetch işlemi tamamlandıktan sonra imageFileList'i güncelle
-    if (dataSource && dataSource.product && dataSource.product.images) {
-      handleImageFileListChange(dataSource.product.images);
-      console.log(dataSource.product.images);
-      console.log(imageFileList);
+    if (dataSource._id !== undefined) {
+      const handleImageUpload = async () => {
+        try {
+          const uploadedFiles = await Promise.all(
+            dataSource.images.map(async (image) => {
+              try {
+                const response = await axios.get(`${baseUrl}${image.pathUrl}`, {
+                  responseType: "blob",
+                });
+
+                const file = new File([response.data], image.imageName, {
+                  type: image.type,
+                  lastModified: image.lastModified,
+                  lastModifiedDate: image.lastModifiedDate,
+                  thumbUrl: image.pathUrl
+                });
+
+                const thumbUrl = await getBase64(file);
+
+                // Dosyayı istediğiniz obje formatına dönüştür
+                const transformedFile = {
+                  originFileObj: file,
+                  name: image.imageName,
+                  type: image.type,
+                  status: "success", // Dosya başarıyla yüklendi
+                  response: "Server response or error message", // Sunucudan dönen cevap veya hata mesajı
+                  thumbUrl: thumbUrl, // İlgili thumbnail URL (base64 formatında)
+                  url:baseUrl+image.pathUrl,
+                  lastModified: file.lastModified, // Dosyanın son değiştirme tarihi (lastModified özelliği)
+                  lastModifiedDate: file.lastModifiedDate, // Dosyanın son değiştirme tarihi (lastModifiedDate özelliği)
+                };
+
+                return transformedFile;
+              } catch (error) {
+                console.error("Resim Yükleme Hatası:", error);
+                // Hata durumunda bir nesne dönüşü
+                return {
+                  name: image.imageName,
+                  status: "error", // Hata durumu
+                  response: "Hata mesajı", // Hata mesajı
+                  thumbUrl: "", // İlgili thumbnail URL
+                  lastModified: image.lastModified, // Dosyanın son değiştirme tarihi (lastModified özelliği)
+                  lastModifiedDate: image.lastModifiedDate, // Dosyanın son değiştirme tarihi (lastModifiedDate özelliği)`${apiUrl}/product/update/${productId}`
+                };
+              }
+            })
+          );
+
+          handleImageFileListChange(uploadedFiles);
+          console.log("Yüklenen Dosyalar:", uploadedFiles);
+        } catch (error) {
+          console.error("Resim Yükleme Hatası:", error);
+        }
+      };
+
+      handleImageUpload();
+      console.log("imagefilelist : ", imageFileList);
     }
     console.log("fetch sonrası resimler getirildi ");
   }, [dataSource, handleImageFileListChange]);
 
   const onFinish = async (values) => {
     setLoading(true);
-
+    console.log(values);
     const productData = {
       name: values.name,
-      images: imageFileList.map((file) => ({
-        name: file.name,
-        originFileObj: file.originFileObj,
-        thumbUrl: file.thumbUrl,
-        type: file.type,
-        uid: file.uid,
-      })),
       description: values.description,
       brand: "Brand Name",
       price: {
         basePrice: values.basePrice,
         discountPrice: values.discountPrice,
       },
+      images:imageFileList.map((file) => ({
+        imageName:file.name,
+        lastModified: file.lastModified,
+        lastModifiedDate: file.lastModifiedDate,
+        thumbUrl:file.thumbUrl,
+        type: file.type
+      })),
       currency: "TRY",
       stock: values.stock,
       itemType: "PHYSICAL",
       reviews: [], // Assuming reviews is an empty array initially
     };
     console.log(productData);
+    console.log(JSON.stringify(productData));
+
+    const formdata = new FormData();
+    formdata.append("product", JSON.stringify(productData));
+    if (imageFileList && imageFileList.length > 0) {
+      imageFileList.forEach((file) => {
+        formdata.append("files", file.originFileObj, file.name);
+      })
+    }
 
     try {
-      const response = await fetch(`${apiUrl}/product/update/${productId}`, {
-        method: "PUT",
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(productData),
-      });
-      if (response.ok) {
+      const response = await axios.post(`${apiUrl}/product/update/${productId}`,formdata);
+      if (response.status === 200) {
         message.success("Ürün başarıyla güncellendi");
         form.resetFields();
         navigate("/admin/products");
-        
       } else {
         message.error("Ürün güncellenemedi");
       }
@@ -193,7 +255,10 @@ const UpdateProductPage = () => {
         </Form.Item>
         {dataSource && ( // Render child component only if fetch is completed
           <Form.Item label="Ürün Görselleri (Linkler)" name="images">
-            <UploadImage onFileListChange={handleImageFileListChange} imageFileList={imageFileList}></UploadImage>
+            <UploadImage
+              onFileListChange={handleImageFileListChange}
+              imageFileList={imageFileList}
+            ></UploadImage>
           </Form.Item>
         )}
         <Button type="primary" htmlType="submit">

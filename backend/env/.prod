@@ -5,3 +5,4 @@ LOGGER=tiny
 MONGO_URI=mongodb://admin:password@172.25.30.159:27017/prod?authSource=admindirectConnection=true&authMechanism=SCRAM-SHA-1
 JWT_SECRET=61d055016272c60f701be7ac_MKFRGOERPOJCXBkdsf
 END_POINT=https://127.0.0.1/api
+BASE_URL=http://localhost/443

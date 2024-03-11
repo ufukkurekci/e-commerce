@@ -27,13 +27,20 @@ const CreateProductPage = () => {
         basePrice: values.basePrice,
         discountPrice: values.discountPrice,
       },
+      images:imageFileList.map((file) => ({
+        imageName:file.name,
+        lastModified: file.lastModified,
+        lastModifiedDate: file.lastModifiedDate,
+        thumbUrl:file.thumbUrl,
+        type: file.type
+      })),
       currency: "TRY",
       stock: values.stock,
       itemType: "PHYSICAL",
       reviews: [], // Assuming reviews is an empty array initially
     };
-    console.log(productData);
-    console.log(JSON.stringify(productData));
+    // console.log(productData);
+    // console.log(JSON.stringify(productData));
 
     const formdata = new FormData();
     formdata.append("product", JSON.stringify(productData));
