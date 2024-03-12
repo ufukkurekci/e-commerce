@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import "./ProductGallery.css";
-// import productsData from "../../../data.json";
 import Slider from "react-slick";
 import PropTypes from "prop-types";
 
@@ -11,7 +10,7 @@ const NextBtn = ({ onClick }) => {
       data-glide-dir=">"
       onClick={onClick}
       style={{
-        zIndex: "100"
+        zIndex: "100",
       }}
     >
       <i className="bi bi-chevron-right"></i>
@@ -25,7 +24,7 @@ const PrevBtn = ({ onClick }) => {
       data-glide-dir="<"
       onClick={onClick}
       style={{
-        zIndex: "100"
+        zIndex: "100",
       }}
     >
       <i className="bi bi-chevron-left"></i>
@@ -40,33 +39,15 @@ PrevBtn.propTypes = {
   onClick: PropTypes.func,
 };
 
-const ProductGallery = ({productGalleryId}) => {
+const ProductGallery = ({ product }) => {
+  const baseUrl = import.meta.env.VITE_BASE_URL;
   const [activeImage, setActiveImage] = useState("");
-  const [currentProduct, setcurrentProduct] = useState(null);
-  const apiUrl = import.meta.env.VITE_API_BASE_URL;
-useEffect(() => {
-
-  // const product = productsData.find(p => p._id === Number(productGalleryId));
-
-  const fetchProduct = async () => {
-    try {
-      const response = await fetch(`${apiUrl}/product/get/${productGalleryId}`);
-      if(response.ok) {
-        const data = await response.json();
-        if(data){
-          console.log(data.product.images[0]);
-          setActiveImage(data.product.images[0].thumbUrl);
-          setcurrentProduct(data.product);
-        }
-      }
-    } catch (error) {
-      console.log(error);
+  console.log("gallery", product);
+  useEffect(() => {
+    if (product && product.images && product.images.length > 0) {
+      setActiveImage(baseUrl + product.images[0].pathUrl);
     }
-  }
-  fetchProduct();
-
-
-},[productGalleryId])
+  }, [product, baseUrl]);
 
   const sliderSettings = {
     dots: false,
@@ -85,21 +66,22 @@ useEffect(() => {
         <div className="glide__track" data-glide-el="track">
           <ol className="gallery-thumbs glide__slides">
             <Slider {...sliderSettings}>
-              {currentProduct && currentProduct.images.map((item, index) => (
-                <li
-                  onClick={() => setActiveImage(item.thumbUrl)}
-                  className="glide__slide"
-                  key={index}
-                >
-                  <img
-                    className={`img-fluid ${
-                      item === activeImage ? "active" : ""
-                    }`}
-                    src={`${item.thumbUrl}`}
-                    alt=""
-                  />
-                </li>
-              ))}
+              {product &&
+                product.images.map((item, index) => (
+                  <li
+                    onClick={() => setActiveImage(baseUrl + item.pathUrl)}
+                    className="glide__slide"
+                    key={index}
+                  >
+                    <img
+                      className={`img-fluid ${
+                        item === activeImage ? "active" : ""
+                      }`}
+                      src={`${baseUrl + item.pathUrl}`}
+                      alt=""
+                    />
+                  </li>
+                ))}
             </Slider>
           </ol>
         </div>
@@ -110,7 +92,7 @@ useEffect(() => {
 };
 
 ProductGallery.propTypes = {
-  productGalleryId:PropTypes.string,
+  product: PropTypes.object,
 };
 
 export default ProductGallery;

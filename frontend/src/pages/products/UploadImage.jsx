@@ -4,6 +4,15 @@ import { Modal, Upload } from "antd";
 // import axios from "axios";
 import PropTypes from "prop-types";
 
+
+const getBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+
   const UploadImage = ({ onFileListChange , imageFileList}) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
@@ -11,12 +20,11 @@ import PropTypes from "prop-types";
   const [fileList, setFileList] = useState([]);
   const handleCancel = () => setPreviewOpen(false);
   const handlePreview = async (file) => {
-    // if (!file.url && !file.preview) {
-    //    file.preview = await getBase64(file.originFileObj);
-    //   file.url = `${baseUrl}${file.thumbUrl}`;
-    // }
+    if (!file.url) {
+       file.preview = await getBase64(file.originFileObj);
+    }
     
-    setPreviewImage(file.url);
+    setPreviewImage(file.url ||file.preview);
     setPreviewOpen(true);
     setPreviewTitle(
       file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
@@ -29,6 +37,11 @@ import PropTypes from "prop-types";
     onFileListChange(newFileList);
     console.log(newFileList);
  };
+ const dummyRequest = ({ onSuccess }) => {
+  setTimeout(() => {
+    onSuccess("ok");
+  }, 0);
+};
   const uploadButton = (
     <button
       style={{
@@ -50,7 +63,7 @@ import PropTypes from "prop-types";
   return (
     <>
       <Upload
-        // customRequest={customRequest} // veya {customRequest} methodu gircez
+        customRequest={dummyRequest}
         listType="picture-card"
         fileList={imageFileList}
         onPreview={handlePreview}
