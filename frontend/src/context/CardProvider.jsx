@@ -1,6 +1,7 @@
 import { createContext, useEffect } from "react";
 import { useState } from "react";
 import PropTypes from "prop-types";
+import { message } from "antd";
 
 export const CartContext = createContext();
 
@@ -16,19 +17,52 @@ const CardProvider = ({ children }) => {
   }, [cartItems]);
 
   const addToCart = (cartItem) => {
-    setCartItems((prevItems) => [...prevItems, {
-        ...cartItem,
-        quantity: cartItem.quantity ? cartItem.quantity : 1,
+    const isExist = cartItems.filter((item) => item._id === cartItem._id);
+
+    if (isExist.length > 0) {
+      // send from detail page
+      if (cartItem.quantity >= 1) {
+        setCartItems((prevItems) =>
+          prevItems.map((item) =>
+            item._id === cartItem._id
+              ? { ...item, quantity: item.quantity + cartItem.quantity }
+              : item
+          )
+        );
+        message.success(`${cartItem.name} ürünü adedi güncellendi!`);
+      }
+      // send from homepage
+      if (cartItem.quantity === undefined) {
+        setCartItems((prevItems) =>
+          prevItems.map((item) =>
+            item._id === cartItem._id
+              ? { ...item, quantity: item.quantity + 1 }
+              : item
+          )
+        );
+        message.success(`${cartItem.name} ürünü 1 adet arttırıldı!`);
+      }
+    } else {
+      setCartItems((prevItems) => [
+        ...prevItems,
+        {
+          ...cartItem,
+          price: cartItem.price,
+          quantity: cartItem.quantity ? cartItem.quantity : 1,
+        },
+      ]);
+      message.success("Ürün sepete eklendi");
     }
-]);
-console.log("addToCart",cartItem);
+
+    console.log("addToCart(cardprovider)", cartItem);
   };
 
   const removeFromCart = (id) => {
-    return setCartItems((prevItems) =>
+    const items =  setCartItems((prevItems) =>
       prevItems.filter((item) => item._id !== id)
-      
     );
+    message.warning("Ürün sepetten kaldırıldı")
+    return items;
     
   };
 
@@ -37,7 +71,7 @@ console.log("addToCart",cartItem);
       value={{
         addToCart,
         cartItems,
-        removeFromCart
+        removeFromCart,
       }}
     >
       {children}

@@ -1,8 +1,9 @@
 import Reviews from "../../reviews/Reviews";
 import "./ProductTabs.css";
 import { useState } from "react";
+import PropTypes from "prop-types";
 
-const ProductTabs = () => {
+const ProductTabs = ({ product }) => {
   const [activeTab, setActiveTab] = useState("desc");
 
   const handleTabClick = (e, tab) => {
@@ -37,30 +38,21 @@ const ProductTabs = () => {
             activeTab === "desc" ? "active" : ""
           }`}
         >
-          <p>
-            Quisque varius diam vel metus mattis, id aliquam diam rhoncus. Proin
-            vitae magna in dui finibus malesuada et at nulla. Morbi elit ex,
-            viverra vitae ante vel, blandit feugiat ligula. Fusce fermentum
-            iaculis nibh, at sodales leo maximus a. Nullam ultricies sodales
-            nunc, in pellentesque lorem mattis quis. Cras imperdiet est in nunc
-            tristique lacinia. Nullam aliquam mauris eu accumsan tincidunt.
-            Suspendisse velit ex, aliquet vel ornare vel, dignissim a tortor.
-          </p>
-          <br />
-          <p>
-            Quisque varius diam vel metus mattis, id aliquam diam rhoncus. Proin
-            vitae magna in dui finibus malesuada et at nulla. Morbi elit ex,
-            viverra vitae ante vel, blandit feugiat ligula. Fusce fermentum
-            iaculis nibh, at sodales leo maximus a. Nullam ultricies sodales
-            nunc, in pellentesque lorem mattis quis. Cras imperdiet est in nunc
-            tristique lacinia. Nullam aliquam mauris eu accumsan tincidunt.
-            Suspendisse velit ex, aliquet vel ornare vel, dignissim a tortor.
-          </p>
+      <p
+        className="product-description"
+        dangerouslySetInnerHTML={{ __html: product.description }}
+      ></p>
         </div>
-        <Reviews active={activeTab === "reviews" ? "content active" : "content"}></Reviews>
+        <Reviews
+          active={activeTab === "reviews" ? "content active" : "content"} product={product}
+        ></Reviews>
       </div>
     </div>
   );
 };
 
 export default ProductTabs;
+
+ProductTabs.propTypes = {
+  product: PropTypes.string,
+};

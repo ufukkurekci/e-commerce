@@ -42,7 +42,6 @@ PrevBtn.propTypes = {
 const ProductGallery = ({ product }) => {
   const baseUrl = import.meta.env.VITE_BASE_URL;
   const [activeImage, setActiveImage] = useState("");
-  console.log("gallery", product);
   useEffect(() => {
     if (product && product.images && product.images.length > 0) {
       setActiveImage(baseUrl + product.images[0].pathUrl);

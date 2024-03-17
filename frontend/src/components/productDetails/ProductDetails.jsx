@@ -21,7 +21,6 @@ const ProductDetails = ({ productId }) => {
         if (response.ok) {
           const data = await response.json();
           if (data) {
-            console.log(data.images[0]);
             setcurrentProduct(data);
           }
         }
@@ -47,7 +46,7 @@ const ProductDetails = ({ productId }) => {
               <ProductInfo product={currentProduct}></ProductInfo>
             </main>
           </div>
-          <ProductTabs></ProductTabs>
+          <ProductTabs product={currentProduct}></ProductTabs>
         </div>
       </div>
     </section>

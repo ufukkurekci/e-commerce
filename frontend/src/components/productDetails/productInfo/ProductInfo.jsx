@@ -1,15 +1,20 @@
+import { useContext, useRef } from "react";
 import "./ProductInfo.css";
 import PropTypes from "prop-types";
+import { CartContext } from "../../../context/CardProvider";
 
 const ProductInfo = ({ product }) => {
-  console.log("productinfo", product.price);
+   const quantityRef = useRef();
+  // if(!quantityRef.current.value){
+  //   console.log(quantityRef?.current.value);
+  // }
+  const { addToCart } = useContext(CartContext);
   const basePrice = product.price.basePrice;
   const discountRate = product.price.discountPrice;
-  console.log("productinfo",product);
   const discountedPrice = basePrice - (basePrice * discountRate) / 100;
   return (
     <div className="product-info">
-      <h1 className="product-title">Ridley High Waist</h1>
+      <h1 className="product-title">{product.name}</h1>
       <div className="product-review">
         <ul className="product-star">
           <li>
@@ -34,9 +39,10 @@ const ProductInfo = ({ product }) => {
         <s className="old-price">{basePrice.toFixed(2)} TL</s>
         <strong className="new-price">{discountedPrice.toFixed(2)} TL</strong>
       </div>
-      <p className="product-description">
-        {product.description}
-      </p>
+      <p
+        className="product-description"
+        dangerouslySetInnerHTML={{ __html: product.description }}
+      ></p>
       <form className="variations-form">
         <div className="variations">
           {/* <div className="colors">
@@ -79,11 +85,24 @@ const ProductInfo = ({ product }) => {
                 </div>
             </div> */}
           <div className="cart-button">
-            <input type="number" defaultValue="1" min="1" id="quantity" />
+            <input
+              type="number"
+              defaultValue="1"
+              min="1"
+              id="quantity"
+              ref={quantityRef}
+            />
             <button
               className="btn btn-lg btn-primary"
               id="add-to-cart"
               type="button"
+              onClick={() =>
+                addToCart({
+                  ...product,
+                  price: discountedPrice,
+                  quantity: parseInt(quantityRef.current.value)
+                })                
+              }
             >
               Add to cart
             </button>

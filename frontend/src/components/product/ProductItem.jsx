@@ -4,9 +4,9 @@ import PropTypes from "prop-types";
 import { CartContext } from "../../context/CardProvider";
 import { Link } from "react-router-dom";
 const ProductItem = ({ productItem}) => {
-const {cartItems,addToCart} = useContext(CartContext);
+const {addToCart} = useContext(CartContext);
 const baseUrl = import.meta.env.VITE_BASE_URL;
-const filteredCart = cartItems.find((cartItems) => cartItems._id === productItem._id);
+// const filteredCart = cartItems.find((cartItems) => cartItems._id === productItem.id);
 
 //calculate discountedPrice
 
@@ -58,10 +58,9 @@ const discountedPrice = basePrice - (basePrice * discountRate) / 100;
             className="add-to-cart"
             onClick={() => addToCart({
               ...productItem,
-              discountedPrice: discountedPrice,
+              price: discountedPrice,
             })
           }
-            disabled={filteredCart}
           >
             <i className="bi bi-basket-fill"></i>
           </button>
