@@ -46,7 +46,7 @@ const ProductDetails = ({ productId }) => {
               <ProductInfo product={currentProduct}></ProductInfo>
             </main>
           </div>
-          <ProductTabs product={currentProduct}></ProductTabs>
+          <ProductTabs product={currentProduct} setcurrentProduct={setcurrentProduct}></ProductTabs>
         </div>
       </div>
     </section>

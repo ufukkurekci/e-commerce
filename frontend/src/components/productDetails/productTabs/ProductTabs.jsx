@@ -3,7 +3,7 @@ import "./ProductTabs.css";
 import { useState } from "react";
 import PropTypes from "prop-types";
 
-const ProductTabs = ({ product }) => {
+const ProductTabs = ({ product, setcurrentProduct }) => {
   const [activeTab, setActiveTab] = useState("desc");
 
   const handleTabClick = (e, tab) => {
@@ -44,7 +44,7 @@ const ProductTabs = ({ product }) => {
       ></p>
         </div>
         <Reviews
-          active={activeTab === "reviews" ? "content active" : "content"} product={product}
+          active={activeTab === "reviews" ? "content active" : "content"} product={product} setcurrentProduct={setcurrentProduct}
         ></Reviews>
       </div>
     </div>
@@ -54,5 +54,6 @@ const ProductTabs = ({ product }) => {
 export default ProductTabs;
 
 ProductTabs.propTypes = {
-  product: PropTypes.string,
+  product: PropTypes.object,
+  setcurrentProduct:PropTypes.func
 };

@@ -1,4 +1,5 @@
-const ReviewItem = () => {
+import PropTypes from "prop-types";
+const ReviewItem = ({ item }) => {
   return (
     <li className="comment-item">
       <div className="comment-avatar">
@@ -29,8 +30,7 @@ const ReviewItem = () => {
         </div>
         <div className="comment-description">
           <p>
-            Sed perspiciatis unde omnis iste natus error sit voluptatem
-            accusantium doloremque laudantium.
+              {item.text}
           </p>
         </div>
       </div>
@@ -39,3 +39,7 @@ const ReviewItem = () => {
 };
 
 export default ReviewItem;
+
+ReviewItem.propTypes = {
+  item: PropTypes.object,
+};
