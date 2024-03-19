@@ -9,7 +9,6 @@ import { Spin } from "antd";
 
 const ProductDetails = ({ productId }) => {
   const apiUrl = import.meta.env.VITE_API_BASE_URL;
-  // const baseUrl = import.meta.env.VITE_BASE_URL;
   const [currentProduct, setcurrentProduct] = useState(null);
   const [loading, setloading] = useState(false)
 

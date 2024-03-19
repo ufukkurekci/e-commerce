@@ -80,4 +80,29 @@ export default (router) => {
       user: user,
     });
   });
+  router.post("/authControl", async (req, res) => {
+    try {
+      const token = req.headers.authorization.split(" ")[1];
+      if (token) {
+        const decodeToken = jwt.verify(token, process.env.JWT_SECRET);
+
+        const { email } = decodeToken;
+
+        const user = await Users.findOne({ email });
+
+        if (user) {
+          res.status(200).json({
+            message: "Token verification successfull",
+            user: user,
+          });
+        }
+      }
+      res.status(401).json({
+        message: "Token verification failed",
+      });
+    } catch (error) {
+      console.log(error);
+      throw new ApiError(error, 401, "unAuthorized");
+    }
+  });
 };

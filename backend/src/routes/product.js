@@ -92,10 +92,7 @@ export default (router) => {
     });
   });
 
-  router.post(
-    "/product/update/:id",
-    upload.array("files"),
-    async (req, res) => {
+  router.post("/product/update/:id",upload.array("files"),async (req, res) => {
       try {
         const existproduct = await Products.findById(req.params.id);
         if (!existproduct) {
@@ -138,26 +135,21 @@ export default (router) => {
       }
       console.log(req.body);
       console.log(req.body.reviews);
-      if(req.body.reviews != undefined){
+      if (req.body.reviews != undefined) {
         const newReview = {
-          text:req.body.reviews.text,
-          rating:req.body.reviews.rating,
-          user:req.body.reviews.user
-        }
+          text: req.body.reviews.text,
+          rating: req.body.reviews.rating,
+          user: req.body.reviews.user,
+        };
         existproduct.reviews.push(newReview);
-  
-       const updatedProduct =  await existproduct.save();
+
+        const updatedProduct = await existproduct.save();
 
         res.status(200).json({
           message: "Review added",
-          product: updatedProduct
-        })
+          product: updatedProduct,
+        });
       }
-      // await Products.findByIdAndUpdate(existproduct.id, updates, {
-      //   new: true,
-      // });
-
-
     } catch (error) {
       throw new ApiError(error, 404);
     }

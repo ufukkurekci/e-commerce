@@ -1,5 +1,9 @@
 import PropTypes from "prop-types";
 const ReviewItem = ({ item }) => {
+  const options = {year: "numeric" , month: "long" , day: "numeric"};
+  const formattedDate = new Date(item.createdAt).toLocaleDateString("tr-TR",options)
+  const authdata = localStorage.getItem("authdata") ? JSON.parse(localStorage.getItem("authdata")) : null;
+  const username = authdata?.user.name;
   return (
     <li className="comment-item">
       <div className="comment-avatar">
@@ -24,9 +28,9 @@ const ReviewItem = ({ item }) => {
           </li>
         </ul>
         <div className="comment-meta">
-          <strong>admin</strong>
-          <span>-</span>
-          <time>April 23, 2022</time>
+          <strong>{username}</strong>
+          <span> - </span>
+          <time>{formattedDate}</time>
         </div>
         <div className="comment-description">
           <p>

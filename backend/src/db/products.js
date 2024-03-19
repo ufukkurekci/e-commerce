@@ -4,21 +4,36 @@ import nanoid from "../utils/nanoid";
 const { Schema } = mongoose;
 const { ObjectId } = Schema.Types;
 
-const ReviewsSchema = new Schema({
-  text: {
-    type: String,
-    required: true,
+const ReviewsSchema = new Schema(
+  {
+    text: {
+      type: String,
+      required: true,
+    },
+    rating: {
+      type: Number,
+      required: true,
+    },
+    user: {
+      type: ObjectId,
+      required: true,
+      ref: "Users",
+    },
   },
-  rating: {
-    type: Number,
-    required: true,
-  },
-  user: {
-    type: ObjectId,
-    required: true,
-    ref: "Users",
-  },
-});
+  {
+    _id: true,
+    collection: "reviews",
+    timestamps: true,
+    toJSON: {
+      transform: (doc, ret) => {
+        delete ret.__v;
+        return {
+          ...ret,
+        };
+      },
+    },
+  }
+);
 
 const Reviews = mongoose.model("Reviews", ReviewsSchema);
 const ProductsSchema = new Schema(
@@ -29,10 +44,10 @@ const ProductsSchema = new Schema(
     },
     images: [
       {
-        lastModified:{
+        lastModified: {
           type: Number,
         },
-        lastModifiedDate:{
+        lastModifiedDate: {
           type: Date,
         },
         imageName: {
@@ -41,10 +56,10 @@ const ProductsSchema = new Schema(
         pathUrl: {
           type: String,
         },
-        thumbUrl:{
+        thumbUrl: {
           type: String,
         },
-        type:{
+        type: {
           type: String,
         },
       },

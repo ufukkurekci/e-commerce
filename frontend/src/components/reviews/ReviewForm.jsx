@@ -2,6 +2,7 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import { message } from "antd";
 import axios from "axios";
+import ApiError from "../../../../backend/src/error/ApiError";
 
 const ReviewForm = ({ product, setcurrentProduct }) => {
   const [rating, setrating] = useState(0);
@@ -22,12 +23,31 @@ const ReviewForm = ({ product, setcurrentProduct }) => {
       reviews: {
         text: review,
         rating: parseInt(rating),
-        user: authData.user._id,
+        user: authData?.user._id,
       },
     };
 
     console.log(product);
 
+    // if(authData.token != undefined){
+    //   message.error("Yorum yapmak için lütfen giriş yapın");
+    //   throw new ApiError("Yorum yapmak için lütfen giriş yapın",401,"unAuthorized");
+
+    // }
+
+    try {
+      const token = authData?.token;
+      await axios.post(`${apiUrl}/authControl`, null, {
+        headers: {
+          Authorization: `${token}`
+        }
+      })
+    } catch (error) {
+      console.log(error);
+      message.error("Yorum yapmak için lütfen giriş yapın");
+      throw new ApiError("Birşeyler ters gitti lütfen tekrar dene ! ", 401, "unAuthorized");
+    }
+    
     try {
       const response = await axios.post(`${apiUrl}/product/addReview/${product._id}`, data);
       if (response.status === 200) {
