@@ -24,6 +24,16 @@ export default (router) => {
     });
   });
 
+  router.get("/get/user/:id", async (req,res) => {
+    try {
+      const user = await Users.findById(req.params.id);
+      res.status(200).json(user);
+
+    } catch (error) {
+      throw new ApiError(error, 500, "user get error");
+    }
+  })
+
   router.post("/register", async (req, res) => {
     try {
       const { email, password } = req.body;
@@ -36,7 +46,7 @@ export default (router) => {
         password: password,
         role: "admin",
         locale: "tr",
-        name: "ufuk",
+        name: "skyline",
         surname: "kurekci",
         phoneNumber: "+905350000000",
         identityNumber: "00000000000",
@@ -48,9 +58,12 @@ export default (router) => {
         ip: req.connection.remoteAddress,
         cardUserKey: "",
       });
-      res.status(201).json({
-        message: "User created",
-        user: newUser,
+      const userJSON = newUser.toJSON();
+      const token = jwt.sign(userJSON, process.env.JWT_SECRET);
+
+      res.json({
+        token: `Bearer ${token}`,
+        user: userJSON
       });
       await newUser.save();
     } catch (error) {
@@ -97,9 +110,6 @@ export default (router) => {
           });
         }
       }
-      res.status(401).json({
-        message: "Token verification failed",
-      });
     } catch (error) {
       console.log(error);
       throw new ApiError(error, 401, "unAuthorized");
