@@ -154,4 +154,20 @@ export default (router) => {
       throw new ApiError(error, 404);
     }
   });
+
+  router.get("/product/search/:productName", async (req, res) => {
+    try {
+      const productName = req.params.productName;
+      const products = await Products.find({
+        name: {
+          $regex: productName,
+          $options: "i",
+        },
+      });
+      res.status(200).json(products);
+    } catch (error) {
+      console.log(error);
+      throw new ApiError(error, 500, "product getall error");
+    }
+  });
 };

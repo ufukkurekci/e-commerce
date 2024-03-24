@@ -8,7 +8,7 @@ const CardTotals = () => {
   const [fastCargoChecked, setfastCargoChecked] = useState(false);
   const cartItemTotals = cartItems.map((item) => {
     const itemTotal = item.price * item.quantity;
-    console.log(cartItems);
+    // console.log(cartItems);
     return itemTotal;
   });
 

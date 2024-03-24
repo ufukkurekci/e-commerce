@@ -7,9 +7,4 @@ export default (router) => {
             userAgent:userAgent
         })
     });
-
-    router.post("/upload", async (req, res) => {
-        res.json(200);
-      });
-
 }
